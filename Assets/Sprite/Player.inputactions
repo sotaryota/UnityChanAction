@@ -1,0 +1,33 @@
+{
+    "name": "Player",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "dc015f4e-74b7-4695-997b-6f21331a7486",
+            "actions": [
+                {
+                    "name": "Camera XY",
+                    "type": "PassThrough",
+                    "id": "7ce0109f-0139-4f68-ba4a-73be7dda06ed",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f8f9ae92-cf1f-4e72-8515-e13060b3f98d",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera XY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
