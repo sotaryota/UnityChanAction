@@ -8,25 +8,35 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     Gamepad gamepad;
     PlayerAnimation playerAnimation;
+    MainUIManager ui;
+
+    private Vector3 cameraForward;        //カメラの方向
+    private Vector3 moveForward;          //プレイヤの方向
 
     [Header("プレイヤ情報")]
     [SerializeField] GameObject startPos; //キャラの初期位置
-    Vector3 moveDirection;
-    [SerializeField] float walkSpeed; 　  //歩行時のキャラの移動スピード
-    [SerializeField] float runSpeed; 　   //ダッシュ時のキャラの移動スピード
-    private float speed;                  //移動スピード
-    public float charaDir = 0.0f;   　    //キャラの位置
-    float horizontal;                　   //X軸
-    float vertical;                　　   //Z軸
+    [SerializeField] GameObject onBlock;  //プレイヤが乗っているブロック
+    private Vector3 moveDirection;        //プレイヤの移動量
+    [SerializeField] float walkSpeed; 　  //歩行時の移動スピード
+    [SerializeField] float runSpeed; 　   //走行時の移動スピード
+    private float speed;                  //現在の移動スピード
+    private float horizontal;             //LスティックX軸
+    private float vertical;               //LスティックY軸
 
-    [SerializeField] LayerMask layer;
-    [SerializeField] GameObject gameObject;
+    Vector3 velocity;
+    [SerializeField] private Transform stepRay;             //段差を昇る為のレイを飛ばす位置
+    [SerializeField] private float stepDistance = 0.5f;     //レイを飛ばす距離
+    [SerializeField] private float stepOffset = 0.3f;       //昇れる段差
+    [SerializeField] private float slopeLimit = 65f;        //昇れる角度
+    [SerializeField] private float slopeDistance = 1f;      //昇れる段差の位置から飛ばすレイの距離
+
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = startPos.transform.position;
         playerAnimation = GetComponent<PlayerAnimation>();
+        ui = GetComponent<MainUIManager>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -36,24 +46,26 @@ public class PlayerMove : MonoBehaviour
         gamepad = Gamepad.current;
         if (gamepad == null) return;
 
-        horizontal = gamepad.leftStick.x.ReadValue(); //X軸の動き
-        vertical = gamepad.leftStick.y.ReadValue();   //Z軸の動き
+        horizontal = gamepad.leftStick.x.ReadValue();
+        vertical = gamepad.leftStick.y.ReadValue();
 
         //スティックがニュートラルでないなら
         if (vertical != 0.0f || horizontal != 0.0f)
         {
-            if (gamepad.rightShoulder.isPressed && RunFlag(-0.7f,0.7f,-0.7f,0.7f))
-            {
+            if (gamepad.rightShoulder.isPressed && RunFlag(-0.7f, 0.7f, -0.7f, 0.7f))
+            { //走る
                 playerAnimation.run = true;
                 playerAnimation.walk = false;
                 speed = runSpeed;
             }
             else
-            {
+            { //歩く
                 playerAnimation.walk = true;
                 playerAnimation.run = false;
                 speed = walkSpeed;
             }
+
+            //StairsCheck();
         }
         else
         {
@@ -63,23 +75,16 @@ public class PlayerMove : MonoBehaviour
 
         PlayerForward();
 
-        rb.AddForce(moveDirection);
-        
-        //特定のコマンドでスタート地点、または中間地点に戻る
-        if (gamepad.startButton.wasPressedThisFrame)
-        {
-            transform.position = startPos.transform.position;
-        }
-        
+        rb.AddForce(moveDirection + velocity);
     }
-    //プレイヤの向きをカメラの方向に合わせる
+    //プレイヤの向きをカメラの方向に合わせる 
     void PlayerForward()
     {
         // カメラの方向から、X-Z平面の単位ベクトルを取得
-        Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveForward = cameraForward * vertical + Camera.main.transform.right * horizontal;
+        moveForward = cameraForward * vertical + Camera.main.transform.right * horizontal;
 
         // 移動方向にスピードを掛ける
         moveDirection = moveForward * speed;
@@ -87,36 +92,55 @@ public class PlayerMove : MonoBehaviour
         // キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
         {
-            transform.rotation = Quaternion.LookRotation(moveForward);
+            transform.rotation = Quaternion.LookRotation(moveForward); ;
         }
     }
-    
+    //private void StairsCheck()
+    //{
+    //    Debug.DrawLine(transform.position + new Vector3(0f, stepOffset, 0f), transform.position + new Vector3(0f, stepOffset, 0f) + transform.forward * stepOffset, Color.green);
+
+    //    //ステップ用のレイが地面に接触しているかどうか
+    //    if (Physics.Linecast(stepRay.position, stepRay.position + stepRay.forward * stepDistance, out var stepHit, LayerMask.GetMask("Ground")))
+    //    {
+    //        //進行方向の地面の角度が指定以下、または昇れる段差より下だった場合の移動処理
+    //        if(!Physics.Linecast(transform.position + new Vector3(0f, stepOffset, 0f), transform.position + new Vector3(0f, stepOffset, 0f) + transform.forward * slopeDistance, LayerMask.GetMask("Ground")))
+    //        {
+    //            velocity = new Vector3(0f, (Quaternion.FromToRotation(Vector3.up, stepHit.normal) * transform.forward * 1.5f).y, 0f) + transform.forward * 1.5f;
+
+    //        }
+    //    }
+    //}
+
     //スティック入力の大きさでダッシュするか判定
-    bool RunFlag(float Xlow,float Xhigh,float Ylow,float Yhigh)
+    bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
     {
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Sea")
         {
             transform.position = startPos.transform.position;
         }
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if(collision.gameObject.tag == "MoveBlock")
+        if (collision.gameObject.tag == "Item")
         {
-            gameObject = collision.gameObject.transform.parent.gameObject;
-            transform.SetParent(gameObject.transform);
+            Destroy(collision.gameObject);
         }
     }
-    private void OnCollisionExit(Collision collision)
+    void OnCollisionStay(Collision collision)
     {
-        if(collision.gameObject.tag == "MoveBlock")
+        if (collision.gameObject.tag == "MoveBlock")
         {
-            gameObject = null;
+            onBlock = collision.gameObject.transform.parent.gameObject;
+            transform.SetParent(onBlock.transform);
+        }
+    }
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "MoveBlock")
+        {
+            onBlock = null;
             transform.SetParent(null);
         }
     }

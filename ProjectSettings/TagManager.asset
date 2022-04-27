@@ -9,6 +9,7 @@ TagManager:
   - MoveBlock
   - Save
   - Sea
+  - Item
   layers:
   - Default
   - TransparentFX

@@ -10,6 +10,7 @@ public class MoveBlock : MonoBehaviour
     [SerializeField] private float lengthX; //X²‚Ì“®‚«‚Ì‘å‚«‚³
     [SerializeField] private float lengthY; //Y²‚Ì“®‚«‚Ì‘å‚«‚³
     [SerializeField] private float lengthZ; //Z²‚Ì“®‚«‚Ì‘å‚«‚³
+    [SerializeField] float min;
     float valueX;
     float valueY;
     float valueZ;
@@ -21,9 +22,9 @@ public class MoveBlock : MonoBehaviour
     }
     private void Update()
     {
-        valueX = Mathf.PingPong(Time.time, lengthX);@//X²‚Ì“®‚«
-        valueY = Mathf.PingPong(Time.time, lengthY);  //Y²‚Ì“®‚«
-        valueZ = Mathf.PingPong(Time.time, lengthZ);  //Z²‚Ì“®‚«
+        valueX = Mathf.PingPong(Time.time, lengthX) / min;@//X²‚Ì“®‚«
+        valueY = Mathf.PingPong(Time.time, lengthY) / min;  //Y²‚Ì“®‚«
+        valueZ = Mathf.PingPong(Time.time, lengthZ) / min;  //Z²‚Ì“®‚«
 
         MoveBlockDirection();
     }

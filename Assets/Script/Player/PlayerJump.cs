@@ -7,7 +7,7 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
-    Vector3 gravity;
+    MainUIManager ui;
 
     [Header("Ground Check Sphere")]
     public LayerMask groundMask;             //’n–ÊƒŒƒCƒ„[
