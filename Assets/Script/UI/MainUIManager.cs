@@ -12,6 +12,8 @@ public class MainUIManager : MonoBehaviour
     public bool pause = false;
 
     [Header("Audio")]
+    private AudioSource select;
+    [SerializeField] AudioClip selectSE;
     [SerializeField] AudioSource playerAudio;
     [SerializeField] AudioSource bgm;
 
@@ -20,15 +22,24 @@ public class MainUIManager : MonoBehaviour
     private bool panelFlag;
     [SerializeField] Button returnButton;   //ゲームに戻る
     [SerializeField] Button restartButton;  //再スタート
+    private Scene nowScene;
     [SerializeField] Button titleButton;    //タイトルに戻る
     [SerializeField] Button exitButton;     //ゲーム終了
-    private GameObject button;
+    private GameObject nowButton;           //現在選択中のボタン
+    private GameObject beforeButton;        //ボタンを切り替えたかどうか
+    private bool initial = true;            //一度だけ処理をするための変数
     [SerializeField] GameObject selectIcon; //選択アイコン
     [SerializeField] Vector3 selectIconPos; //選択アイコンの位置
+
+    [Header("Item Poeces")]
+    public int itemScore = 0;
+    [SerializeField] GameObject[] itemPoeces;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        select        = GetComponent<AudioSource>();
         playerAudio   = GameObject.Find("player").GetComponent<AudioSource>();
         bgm           = GameObject.Find("MainCamera").GetComponent<AudioSource>();
         returnButton  = GameObject.Find("/Canvas/Panel/ReturnButton").GetComponent<Button>();
@@ -37,6 +48,7 @@ public class MainUIManager : MonoBehaviour
         exitButton    = GameObject.Find("/Canvas/Panel/ExitButton").GetComponent<Button>();
         panel.SetActive(false); 
         returnButton.Select();
+        nowScene = SceneManager.GetActiveScene();
     }
 
         // Update is called once per frame
@@ -70,30 +82,27 @@ public class MainUIManager : MonoBehaviour
         }
         //セレクト中のボタンがわかる処理
         //----------------------------------------------------------------------------------
-        //button = EventSystem.current.currentSelectedGameObject;
-        //selectIconPos = button.transform.position - new Vector3(150, 0, 0);
-        //SelectButtonPos();
-        //Debug.Log(selectIcon.transform.position);
+        SelectButtonPos();
     }
-    //void SelectButtonPos()
-    //{
-    //    if (button == restartButton)
-    //    {
-    //        selectIcon.transform.position = selectIconPos;
-    //    }
-    //    else if (button == titleButton)
-    //    {
-    //        selectIcon.transform.position = selectIconPos;
-    //    }
-    //    else if (button == returnButton)
-    //    {
-    //        selectIcon.transform.position = selectIconPos;
-    //    }
-    //    else if(button == exitButton)
-    //    {
-    //        selectIcon.transform.position = selectIconPos;
-    //    }
-    //}
+    void SelectButtonPos()
+    {
+        nowButton = EventSystem.current.currentSelectedGameObject;
+        if (initial)
+        {
+            beforeButton = nowButton;
+            selectIcon.transform.SetParent(nowButton.transform.parent);
+            selectIcon.transform.position = nowButton.transform.position - selectIconPos;
+            initial = false;
+        }
+        if(nowButton != beforeButton)
+        {
+            selectIcon.transform.SetParent(nowButton.transform.parent);
+            selectIcon.transform.position = nowButton.transform.position - selectIconPos;
+            select.PlayOneShot(selectSE);
+            beforeButton = nowButton;
+        }
+        
+    }
     //---------------------------------------------------------------------------------------
     public void OnReturnButton()
     {
@@ -105,7 +114,7 @@ public class MainUIManager : MonoBehaviour
     public void OnRestartButton()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("MainGameScene");
+        SceneManager.LoadScene(nowScene.name);
     }
     public void OnTitleButton()
     {
@@ -116,5 +125,4 @@ public class MainUIManager : MonoBehaviour
     {
         Application.Quit();
     }
-
 }

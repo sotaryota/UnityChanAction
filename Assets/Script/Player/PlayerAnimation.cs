@@ -8,6 +8,8 @@ public class PlayerAnimation : MonoBehaviour
 
     public bool run = false;
     public bool walk = false;
+    public bool fall = false;
+    public bool jumpExit = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,5 +22,6 @@ public class PlayerAnimation : MonoBehaviour
     {
         animator.SetBool("Run", run);
         animator.SetBool("Walking", walk);
+        animator.SetBool("JumpFall", fall);
     }
 }

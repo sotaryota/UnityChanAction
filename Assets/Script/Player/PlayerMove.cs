@@ -8,7 +8,6 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     Gamepad gamepad;
     PlayerAnimation playerAnimation;
-    MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
@@ -22,27 +21,36 @@ public class PlayerMove : MonoBehaviour
     private float speed;                  //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
+    public bool goalFlag = false;
 
-    Vector3 velocity;
-    [SerializeField] private Transform stepRay;             //段差を昇る為のレイを飛ばす位置
-    [SerializeField] private float stepDistance = 0.5f;     //レイを飛ばす距離
-    [SerializeField] private float stepOffset = 0.3f;       //昇れる段差
-    [SerializeField] private float slopeLimit = 65f;        //昇れる角度
-    [SerializeField] private float slopeDistance = 1f;      //昇れる段差の位置から飛ばすレイの距離
-
+    //小さい段差に引っかからない処理
+    //------------------------------------------------------------------------------------------------
+    //Vector3 velocity;
+    //[SerializeField] private Transform stepRay;             //段差を昇る為のレイを飛ばす位置
+    //[SerializeField] private float stepDistance = 0.5f;     //レイを飛ばす距離
+    //[SerializeField] private float stepOffset = 0.3f;       //昇れる段差
+    //[SerializeField] private float slopeLimit = 65f;        //昇れる角度
+    //[SerializeField] private float slopeDistance = 1f;      //昇れる段差の位置から飛ばすレイの距離
+    //------------------------------------------------------------------------------------------------
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = startPos.transform.position;
         playerAnimation = GetComponent<PlayerAnimation>();
-        ui = GetComponent<MainUIManager>();
         rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (goalFlag)
+        {
+            playerAnimation.walk = false;
+            playerAnimation.run  = false;
+            return;
+        }
+
         gamepad = Gamepad.current;
         if (gamepad == null) return;
 
@@ -75,7 +83,7 @@ public class PlayerMove : MonoBehaviour
 
         PlayerForward();
 
-        rb.AddForce(moveDirection + velocity);
+        rb.AddForce(moveDirection);
     }
     //プレイヤの向きをカメラの方向に合わせる 
     void PlayerForward()
@@ -95,6 +103,8 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(moveForward); ;
         }
     }
+    //小さい段差に引っかからない処理
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //private void StairsCheck()
     //{
     //    Debug.DrawLine(transform.position + new Vector3(0f, stepOffset, 0f), transform.position + new Vector3(0f, stepOffset, 0f) + transform.forward * stepOffset, Color.green);
@@ -110,6 +120,7 @@ public class PlayerMove : MonoBehaviour
     //        }
     //    }
     //}
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //スティック入力の大きさでダッシュするか判定
     bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
@@ -117,15 +128,24 @@ public class PlayerMove : MonoBehaviour
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
     }
 
+    //オブジェクトとの接触判定
+    //----------------------------------------------------------------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Item")
+        {
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.tag == "Goal")
+        {
+            goalFlag = true;
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Sea")
         {
             transform.position = startPos.transform.position;
-        }
-        if (collision.gameObject.tag == "Item")
-        {
-            Destroy(collision.gameObject);
         }
     }
     void OnCollisionStay(Collision collision)
@@ -144,4 +164,5 @@ public class PlayerMove : MonoBehaviour
             transform.SetParent(null);
         }
     }
+    //----------------------------------------------------------------------------
 }

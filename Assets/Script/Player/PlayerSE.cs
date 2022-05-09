@@ -6,6 +6,7 @@ public class PlayerSE : MonoBehaviour
 {
     PlayerAnimation playerAnimation;
     PlayerJump playerJump;
+    PlayerMove playerMove;
     
     AudioSource audio;
     [SerializeField] AudioClip walkSE;
@@ -19,8 +20,9 @@ public class PlayerSE : MonoBehaviour
     void Start()
     {
         playerAnimation = GetComponent<PlayerAnimation>();
-        playerJump = GetComponent<PlayerJump>();
-        audio = GetComponent<AudioSource>();
+        playerJump      = GetComponent<PlayerJump>();
+        playerMove      = GetComponent<PlayerMove>();
+        audio           = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -44,6 +46,10 @@ public class PlayerSE : MonoBehaviour
                 return;
             }
             StartCoroutine("RunSE");
+        }
+        if(playerMove.goalFlag)
+        {
+            audio.Stop();
         }
     }
     IEnumerator WalkSE()
