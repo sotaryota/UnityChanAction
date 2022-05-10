@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     Gamepad gamepad;
     PlayerAnimation playerAnimation;
+    MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
@@ -23,21 +24,12 @@ public class PlayerMove : MonoBehaviour
     private float vertical;               //LスティックY軸
     public bool goalFlag = false;
 
-    //小さい段差に引っかからない処理
-    //------------------------------------------------------------------------------------------------
-    //Vector3 velocity;
-    //[SerializeField] private Transform stepRay;             //段差を昇る為のレイを飛ばす位置
-    //[SerializeField] private float stepDistance = 0.5f;     //レイを飛ばす距離
-    //[SerializeField] private float stepOffset = 0.3f;       //昇れる段差
-    //[SerializeField] private float slopeLimit = 65f;        //昇れる角度
-    //[SerializeField] private float slopeDistance = 1f;      //昇れる段差の位置から飛ばすレイの距離
-    //------------------------------------------------------------------------------------------------
-
     // Start is called before the first frame update
     void Start()
     {
         transform.position = startPos.transform.position;
         playerAnimation = GetComponent<PlayerAnimation>();
+        ui = GameObject.Find("UIManager").GetComponent<MainUIManager>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -85,7 +77,11 @@ public class PlayerMove : MonoBehaviour
 
         rb.AddForce(moveDirection);
     }
-    //プレイヤの向きをカメラの方向に合わせる 
+    //////////////////////////////////
+
+    //プレイヤの向きをカメラの方向に合わせる処理
+
+    //////////////////////////////////
     void PlayerForward()
     {
         // カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -103,40 +99,28 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(moveForward); ;
         }
     }
-    //小さい段差に引っかからない処理
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //private void StairsCheck()
-    //{
-    //    Debug.DrawLine(transform.position + new Vector3(0f, stepOffset, 0f), transform.position + new Vector3(0f, stepOffset, 0f) + transform.forward * stepOffset, Color.green);
-
-    //    //ステップ用のレイが地面に接触しているかどうか
-    //    if (Physics.Linecast(stepRay.position, stepRay.position + stepRay.forward * stepDistance, out var stepHit, LayerMask.GetMask("Ground")))
-    //    {
-    //        //進行方向の地面の角度が指定以下、または昇れる段差より下だった場合の移動処理
-    //        if(!Physics.Linecast(transform.position + new Vector3(0f, stepOffset, 0f), transform.position + new Vector3(0f, stepOffset, 0f) + transform.forward * slopeDistance, LayerMask.GetMask("Ground")))
-    //        {
-    //            velocity = new Vector3(0f, (Quaternion.FromToRotation(Vector3.up, stepHit.normal) * transform.forward * 1.5f).y, 0f) + transform.forward * 1.5f;
-
-    //        }
-    //    }
-    //}
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //////////////////////////////////
 
     //スティック入力の大きさでダッシュするか判定
+
+    //////////////////////////////////
     bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
     {
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
     }
+    //////////////////////////////////
 
     //オブジェクトとの接触判定
-    //----------------------------------------------------------------------------
+
+    //////////////////////////////////
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Item")
         {
             Destroy(other.gameObject);
+            ui.itemScore++;
         }
-        if(other.gameObject.tag == "Goal")
+        if (other.gameObject.tag == "Goal")
         {
             goalFlag = true;
         }
@@ -164,5 +148,4 @@ public class PlayerMove : MonoBehaviour
             transform.SetParent(null);
         }
     }
-    //----------------------------------------------------------------------------
 }

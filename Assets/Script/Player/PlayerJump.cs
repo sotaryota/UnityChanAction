@@ -9,6 +9,7 @@ public class PlayerJump : MonoBehaviour
     Gamepad gamepad;
     PlayerMove playerMove;
     PlayerAnimation playerAnimation;
+    MainUIManager ui;
 
     [Header("Ground Check Sphere")]
     public LayerMask groundMask;             //地面レイヤー
@@ -17,18 +18,22 @@ public class PlayerJump : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField] float jumpPow;          //ジャンプ力
-    [SerializeField] bool isJump;            //ジャンプできるかどうか
+    [SerializeField] bool isJump;            //ジャンプボタンが押されているか
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        playerMove = GetComponent<PlayerMove>();
+        rb              = GetComponent<Rigidbody>();
+        playerMove      = GetComponent<PlayerMove>();
         playerAnimation = GetComponent<PlayerAnimation>();
+        ui              = GameObject.Find("UIManager").GetComponent<MainUIManager>();
     }
     // Update is called once per frame
     private void Update()
     {
+        if (ui.pause)
+            return;
+
         if (playerMove.goalFlag)
         {
             playerAnimation.fall = false;
@@ -38,6 +43,24 @@ public class PlayerJump : MonoBehaviour
         if(gamepad == null)
         gamepad = Gamepad.current;
 
+        IsGround();
+    }
+    private void FixedUpdate()
+    {
+        //ジャンプボタンが押されているか
+        if(isJump)
+        {
+            rb.AddForce(jumpPow * Vector3.up, ForceMode.Impulse);
+            playerAnimation.fall = true;
+        }
+    }
+    //////////////////////////////////
+
+    //接地判定
+
+    //////////////////////////////////
+    void IsGround()
+    {
         isGround = Physics.CheckSphere(transform.position, playerThicness, groundMask);
 
         if (isGround)
@@ -53,23 +76,5 @@ public class PlayerJump : MonoBehaviour
             isJump = false;
             playerAnimation.fall = true;
         }
-
-    }
-    private void FixedUpdate()
-    {
-        gamepad = Gamepad.current;
-        if (gamepad == null) return;
-
-        //ジャンプボタンが押されているか
-        if(isJump)
-        {
-            rb.AddForce(jumpPow * Vector3.up, ForceMode.Impulse);
-            playerAnimation.fall = true;
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, playerThicness);
     }
 }

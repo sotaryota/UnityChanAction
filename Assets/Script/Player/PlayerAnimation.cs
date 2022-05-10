@@ -6,10 +6,9 @@ public class PlayerAnimation : MonoBehaviour
 {
     Animator animator;
 
-    public bool run = false;
-    public bool walk = false;
-    public bool fall = false;
-    public bool jumpExit = false;
+    public bool run = false;   //ëñÇÈ
+    public bool walk = false;  //ï‡Ç≠
+    public bool fall = false;Å@//óéâ∫
 
     // Start is called before the first frame update
     void Start()

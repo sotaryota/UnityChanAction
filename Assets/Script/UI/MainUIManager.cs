@@ -18,11 +18,11 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] AudioSource bgm;
 
     [Header("UI")]
-    [SerializeField] GameObject panel;
-    private bool panelFlag;
+    [SerializeField] GameObject panel;      //メニュー画面用のパネル
+    private bool panelFlag;                 //パネルのオン・オフ
     [SerializeField] Button returnButton;   //ゲームに戻る
     [SerializeField] Button restartButton;  //再スタート
-    private Scene nowScene;
+    private Scene nowScene;                 //現在のシーン
     [SerializeField] Button titleButton;    //タイトルに戻る
     [SerializeField] Button exitButton;     //ゲーム終了
     private GameObject nowButton;           //現在選択中のボタン
@@ -31,8 +31,9 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] GameObject selectIcon; //選択アイコン
     [SerializeField] Vector3 selectIconPos; //選択アイコンの位置
 
-    [Header("Item Poeces")]
-    public int itemScore = 0;
+    [Header("Item")]
+    private int befScore = 0;                  //ひとつ前の獲得アイテム数
+    public int itemScore = 0;                  //現在の獲得アイテム数
     [SerializeField] GameObject[] itemPoeces;
 
 
@@ -47,6 +48,10 @@ public class MainUIManager : MonoBehaviour
         titleButton   = GameObject.Find("/Canvas/Panel/TitleButton").GetComponent<Button>();
         exitButton    = GameObject.Find("/Canvas/Panel/ExitButton").GetComponent<Button>();
         panel.SetActive(false); 
+        for(int i = 1;i <= 9;++i)
+        {
+            itemPoeces[i].SetActive(false);
+        }
         returnButton.Select();
         nowScene = SceneManager.GetActiveScene();
     }
@@ -61,52 +66,81 @@ public class MainUIManager : MonoBehaviour
             if(!panelFlag)
             {
                 Time.timeScale = 0f;
-                pause = true;
-
                 playerAudio.Stop();
                 bgm.volume = 0.01f;
 
                 panel.SetActive(true);
                 panelFlag = true;
+                pause = true;
             }
             else
             {
                 Time.timeScale = 1f;
-                pause = false;
-
                 bgm.volume = 0.05f;
 
                 panel.SetActive(false);
-                panelFlag = false;
+                panelFlag = false; 
+                StartCoroutine("PauseWait");
             }
         }
-        //セレクト中のボタンがわかる処理
-        //----------------------------------------------------------------------------------
         SelectButtonPos();
+        ItemCount();
     }
+    //////////////////////////////////
+
+    //セレクト中のボタンがわかる処理
+
+    //////////////////////////////////
     void SelectButtonPos()
     {
         nowButton = EventSystem.current.currentSelectedGameObject;
         if (initial)
         {
             beforeButton = nowButton;
-            selectIcon.transform.SetParent(nowButton.transform.parent);
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
             initial = false;
         }
         if(nowButton != beforeButton)
         {
-            selectIcon.transform.SetParent(nowButton.transform.parent);
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
             select.PlayOneShot(selectSE);
             beforeButton = nowButton;
         }
-        
+
     }
-    //---------------------------------------------------------------------------------------
+    //////////////////////////////////
+
+    //アイテム獲得数
+
+    //////////////////////////////////
+    void ItemCount()
+    {
+        if(itemScore != befScore)
+        {
+            itemPoeces[befScore].SetActive(false);
+            itemPoeces[itemScore].SetActive(true);
+            befScore = itemScore; 
+        }
+    }
+    //////////////////////////////////
+
+    //ポーズ解除時にジャンプしないための処理
+
+    //////////////////////////////////
+    IEnumerator PauseWait()
+    {
+        yield return new WaitForSeconds(0.1f);
+        pause = false;
+    }
+    //////////////////////////////////
+
+    //ボタンの処理
+
+    //////////////////////////////////
     public void OnReturnButton()
     {
         panelFlag = false;
+        StartCoroutine("PauseWait");
         panel.SetActive(false);
         bgm.volume = 0.05f;
         Time.timeScale = 1;
