@@ -235,7 +235,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &20568075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -772,7 +772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &128136005
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1075,7 +1075,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &218761131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2493,7 +2493,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &526216344
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2753,7 +2753,7 @@ GameObject:
   - component: {fileID: 561980347}
   - component: {fileID: 561980346}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: TimePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3006,7 +3006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &616582775
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3081,7 +3081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &646905657
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3467,6 +3467,28 @@ MonoBehaviour:
   - {fileID: 1659605874}
   - {fileID: 1429589666}
   - {fileID: 1988286794}
+  timeNum:
+  - {fileID: 646905656}
+  - {fileID: 1029588630}
+  - {fileID: 415395793}
+  - {fileID: 1066527664}
+  - {fileID: 526216343}
+  - {fileID: 862494376}
+  - {fileID: 128136004}
+  - {fileID: 1441513643}
+  - {fileID: 2079033253}
+  - {fileID: 2032670731}
+  timeNum2:
+  - {fileID: 745986911}
+  - {fileID: 1275551206}
+  - {fileID: 20568074}
+  - {fileID: 972431200}
+  - {fileID: 1013751394}
+  - {fileID: 845987596}
+  - {fileID: 1053118608}
+  - {fileID: 2052196543}
+  - {fileID: 218761130}
+  - {fileID: 616582774}
 --- !u!4 &670115288
 Transform:
   m_ObjectHideFlags: 0
@@ -4074,7 +4096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &745986912
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4538,7 +4560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &845987597
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4708,7 +4730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &862494377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5188,7 +5210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &972431201
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5433,7 +5455,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029588631
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5633,7 +5655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1053118609
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5783,7 +5805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1066527665
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6937,7 +6959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1275551207
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7495,7 +7517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1441513644
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7762,7 +7784,7 @@ GameObject:
   - component: {fileID: 1521427766}
   - component: {fileID: 1521427765}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: MainMenuPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9161,7 +9183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2032670732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9345,7 +9367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2052196544
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9415,7 +9437,7 @@ GameObject:
   - component: {fileID: 2068472320}
   - component: {fileID: 2068472319}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: ScorePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9497,7 +9519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2079033254
 RectTransform:
   m_ObjectHideFlags: 0
