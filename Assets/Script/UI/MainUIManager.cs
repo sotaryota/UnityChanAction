@@ -124,13 +124,16 @@ public class MainUIManager : MonoBehaviour
     //////////////////////////////////
     void TimeCnt()
     {
-        if (nowTime <= 99)
+        if (nowTime < 99)
         {
             nowTime += Time.deltaTime;
             if ((int)nowTime != befTime)
             {
-                timeNum2[(int)nowTime % 10].SetActive(true);
+                timeNum[(int)(befTime/10) % 10].SetActive(false);
+                timeNum[(int)(nowTime/10) % 10].SetActive(true);
+
                 timeNum2[(int)befTime % 10].SetActive(false);
+                timeNum2[(int)nowTime % 10].SetActive(true);
                 befTime = (int)nowTime;
             }
         }
