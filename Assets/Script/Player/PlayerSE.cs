@@ -6,7 +6,7 @@ public class PlayerSE : MonoBehaviour
 {
     PlayerAnimation playerAnimation;
     PlayerJump playerJump;
-    PlayerMove playerMove;
+    GoalProcess goal;
     
     AudioSource audio;
     [SerializeField] AudioClip walkSE;
@@ -21,7 +21,7 @@ public class PlayerSE : MonoBehaviour
     {
         playerAnimation = GetComponent<PlayerAnimation>();
         playerJump      = GetComponent<PlayerJump>();
-        playerMove      = GetComponent<PlayerMove>();
+        goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
         audio           = GetComponent<AudioSource>();
     }
 
@@ -47,7 +47,7 @@ public class PlayerSE : MonoBehaviour
             }
             StartCoroutine("RunSE");
         }
-        if(playerMove.goalFlag)
+        if(goal.goalFlag)
         {
             audio.Stop();
         }

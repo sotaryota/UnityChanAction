@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GoalProcess : MonoBehaviour
 {
+    Gamepad gamepad;
+
     public bool goalFlag = false;
     [SerializeField] private GameObject goalScorePanel;
 
@@ -18,5 +22,11 @@ public class GoalProcess : MonoBehaviour
     {
         if (!goalFlag)
             return;
+        if (gamepad == null)
+            gamepad = Gamepad.current;
+        if (gamepad.buttonNorth.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
     }
 }

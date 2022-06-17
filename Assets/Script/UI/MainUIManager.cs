@@ -37,10 +37,10 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] GameObject[] itemPoeces;  //スコアのスプライト
 
     [Header("Time")]
-    private int befTime = 0;
-    private float nowTime = 0f;
-    [SerializeField] GameObject[] timeNum;
-    [SerializeField] GameObject[] timeNum2;
+    private int befTime = 0;                   //ひとつ前のタイム
+    private float nowTime = 0f;                //現在のタイム
+    [SerializeField] GameObject[] timeNum10;   //時間(2桁目)
+    [SerializeField] GameObject[] timeNum1;    //時間(1桁目)
 
     // Start is called before the first frame update
     void Start()
@@ -56,8 +56,8 @@ public class MainUIManager : MonoBehaviour
         for(int i = 1;i <= 9;++i)
         {
             itemPoeces[i].SetActive(false);
-            timeNum[i].SetActive(false);
-            timeNum2[i].SetActive(false);
+            timeNum10[i].SetActive(false);
+            timeNum1[i].SetActive(false);
         }
         returnButton.Select();
         nowScene = SceneManager.GetActiveScene();
@@ -68,31 +68,11 @@ public class MainUIManager : MonoBehaviour
     {
         if (gamepad == null)
             gamepad = Gamepad.current;
-        if(gamepad.startButton.wasPressedThisFrame)
-        {
-            if(!panelFlag)
-            {
-                Time.timeScale = 0f;
-                playerAudio.Stop();
-                bgm.volume = 0.01f;
-
-                panel.SetActive(true);
-                panelFlag = true;
-                pause = true;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                bgm.volume = 0.05f;
-
-                panel.SetActive(false);
-                panelFlag = false; 
-                StartCoroutine("PauseWait");
-            }
-        }
+        
+        MenuDisplay();
         SelectButtonPos();
         ItemCount();
-        TimeCnt();
+        TimeCount();
     }
     //////////////////////////////////
 
@@ -122,18 +102,18 @@ public class MainUIManager : MonoBehaviour
     //タイムの表示とカウント
 
     //////////////////////////////////
-    void TimeCnt()
+    void TimeCount()
     {
         if (nowTime < 99)
         {
             nowTime += Time.deltaTime;
             if ((int)nowTime != befTime)
             {
-                timeNum[(int)(befTime/10) % 10].SetActive(false);
-                timeNum[(int)(nowTime/10) % 10].SetActive(true);
+                timeNum10[(int)(befTime/10) % 10].SetActive(false);
+                timeNum10[(int)(nowTime/10) % 10].SetActive(true);
 
-                timeNum2[(int)befTime % 10].SetActive(false);
-                timeNum2[(int)nowTime % 10].SetActive(true);
+                timeNum1[(int)befTime % 10].SetActive(false);
+                timeNum1[(int)nowTime % 10].SetActive(true);
                 befTime = (int)nowTime;
             }
         }
@@ -161,6 +141,36 @@ public class MainUIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         pause = false;
+    }
+    //////////////////////////////////
+
+    //メニュー画面のON・OFF
+
+    //////////////////////////////////
+    void MenuDisplay() 
+    {
+        if (gamepad.startButton.wasPressedThisFrame)
+        {
+            if (!panelFlag)
+            {
+                Time.timeScale = 0f;
+                playerAudio.Stop();
+                bgm.volume = 0.01f;
+
+                panel.SetActive(true);
+                panelFlag = true;
+                pause = true;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                bgm.volume = 0.05f;
+
+                panel.SetActive(false);
+                panelFlag = false;
+                StartCoroutine("PauseWait");
+            }
+        }
     }
     //////////////////////////////////
 

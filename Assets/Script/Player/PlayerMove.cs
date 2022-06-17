@@ -8,6 +8,8 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     Gamepad gamepad;
     PlayerAnimation playerAnimation;
+    TutorialManager tutorialManager;
+     GoalProcess goal;
     MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
@@ -22,21 +24,22 @@ public class PlayerMove : MonoBehaviour
     private float speed;                  //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
-    public bool goalFlag = false;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = startPos.transform.position;
-        playerAnimation = GetComponent<PlayerAnimation>();
-        ui = GameObject.Find("UIManager").GetComponent<MainUIManager>();
-        rb = GetComponent<Rigidbody>();
+        playerAnimation    = GetComponent<PlayerAnimation>();
+        rb                 = GetComponent<Rigidbody>();
+        ui                 = GameObject.Find("UIManager").GetComponent<MainUIManager>();
+        tutorialManager    = GameObject.Find("UIManager").GetComponent<TutorialManager>();
+        goal               = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (goalFlag)
+        if (goal.goalFlag)
         {
             playerAnimation.walk = false;
             playerAnimation.run  = false;
@@ -122,7 +125,13 @@ public class PlayerMove : MonoBehaviour
         }
         if (other.gameObject.tag == "Goal")
         {
-            goalFlag = true;
+            goal.goalFlag = true;
+        }
+        if (other.gameObject.tag == "Tutorial" && tutorialManager.imageNum < 3)
+        {
+            tutorialManager.imageNum++;
+            tutorialManager.tutorialFlag = true;
+            other.gameObject.SetActive(false);
         }
     }
     void OnCollisionEnter(Collision collision)

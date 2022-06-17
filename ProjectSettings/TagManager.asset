@@ -11,6 +11,7 @@ TagManager:
   - Sea
   - Item
   - Goal
+  - Tutorial
   layers:
   - Default
   - TransparentFX

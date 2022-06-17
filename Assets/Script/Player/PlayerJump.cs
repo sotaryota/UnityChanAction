@@ -7,7 +7,7 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
-    PlayerMove playerMove;
+    GoalProcess goal;
     PlayerAnimation playerAnimation;
     MainUIManager ui;
 
@@ -24,8 +24,8 @@ public class PlayerJump : MonoBehaviour
     void Start()
     {
         rb              = GetComponent<Rigidbody>();
-        playerMove      = GetComponent<PlayerMove>();
         playerAnimation = GetComponent<PlayerAnimation>();
+        goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
         ui              = GameObject.Find("UIManager").GetComponent<MainUIManager>();
     }
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class PlayerJump : MonoBehaviour
         if (ui.pause)
             return;
 
-        if (playerMove.goalFlag)
+        if (goal.goalFlag)
         {
             playerAnimation.fall = false;
             return;
@@ -43,7 +43,7 @@ public class PlayerJump : MonoBehaviour
         if(gamepad == null)
         gamepad = Gamepad.current;
 
-        IsGround();
+        IsJump();
     }
     private void FixedUpdate()
     {
@@ -59,11 +59,18 @@ public class PlayerJump : MonoBehaviour
     //ê⁄ínîªíË
 
     //////////////////////////////////
-    void IsGround()
+    bool IsGround()
     {
-        isGround = Physics.CheckSphere(transform.position, playerThicness, groundMask);
+        return Physics.CheckSphere(transform.position, playerThicness, groundMask);
+    }
+    //////////////////////////////////
 
-        if (isGround)
+    //ÉWÉÉÉìÉvÇ∑ÇÈ
+
+    //////////////////////////////////
+    void IsJump()
+    {
+        if (IsGround())
         {
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
