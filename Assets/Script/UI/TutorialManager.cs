@@ -12,15 +12,16 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] AudioSource bgm;
 
     [Header("Tutorial")]
-    [SerializeField] GameObject tutorialPanel; //チュートリアル用のパネル
-    [SerializeField] GameObject[] tutorialImage;//表示する画像
-    public int imageNum = 0;                          //表示したい画像の番号
+    [SerializeField] GameObject tutorialPanel;   //チュートリアル用のパネル
+    [SerializeField] GameObject[] tutorialImage; //表示する画像
+    public int imageNum = 0;                     //表示したい画像の番号
     public bool tutorialFlag = false;
 
     // Start is called before the first frame update
     void Start()
     {
         playerAudio = GameObject.Find("player").GetComponent<AudioSource>();
+        tutorialPanel.SetActive(false);
         for (int i = 1; i < tutorialImage.Length; ++i)
         {
             tutorialImage[i].SetActive(false);
@@ -32,6 +33,9 @@ public class TutorialManager : MonoBehaviour
     {
         gamepad = Gamepad.current;
         if (gamepad == null) return;
+
+        if (!tutorialFlag) return;
+
         TutorialDisplay();
     }
     //////////////////////////////////
@@ -43,36 +47,37 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialFlag)
         {
-            Time.timeScale = 0f;
-            playerAudio.Stop();
-            bgm.volume = 0.01f;
-
-            tutorialPanel.SetActive(true);
-            if (gamepad.buttonSouth.wasPressedThisFrame)
+            if (imageNum < tutorialImage.Length)
             {
-                tutorialFlag = false;
-                StartCoroutine("PauseWait");
-            }
-            return;
-        }
-        else
-        {
-            Time.timeScale = 1f;
-            bgm.volume = 0.05f;
+                Time.timeScale = 0f;
+                playerAudio.Stop();
+                bgm.volume = 0.01f;
+                tutorialPanel.SetActive(true);
 
-            tutorialPanel.SetActive(false);
-        }
-
-        for (int i = 0; i < tutorialImage.Length; ++i)
-        {
-            if (i == imageNum)
-            {
-                tutorialImage[imageNum].SetActive(true);
+                if (gamepad.buttonSouth.wasPressedThisFrame)
+                {
+                    tutorialImage[imageNum].SetActive(false);
+                    imageNum++;
+                    tutorialImage[imageNum].SetActive(true);
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
-                tutorialImage[i].SetActive(false);
+                if (gamepad.buttonSouth.wasPressedThisFrame)
+                {
+                    tutorialFlag = false;
+                    Time.timeScale = 1f;
+                    bgm.volume = 0.05f;
+
+                    tutorialPanel.SetActive(false);
+                    StartCoroutine("PauseWait");
+                }
             }
+
         }
     }
     IEnumerator PauseWait()

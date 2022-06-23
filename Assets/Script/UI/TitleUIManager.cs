@@ -10,10 +10,11 @@ public class TitleUIManager : MonoBehaviour
     Button startButton;
     Button exitButton;
     Button tutorialButton;
+    Button controllerButton;
 
     private AudioSource select;
+    ControllerButton cb;
     [SerializeField] AudioClip selectSE;
-
     [SerializeField] GameObject selectIcon; //選択アイコン
     [SerializeField] Vector3 selectIconPos; //選択アイコンの位置
     private GameObject nowButton;
@@ -22,14 +23,18 @@ public class TitleUIManager : MonoBehaviour
 
     private void Start()
     {
-        select         = GetComponent<AudioSource>();
-        startButton    = GameObject.Find("/Canvas/StartButton").GetComponent<Button>();
-        exitButton     = GameObject.Find("/Canvas/ExitButton").GetComponent<Button>();
-        tutorialButton = GameObject.Find("/Canvas/TutorialButton").GetComponent<Button>();
+        select           = GetComponent<AudioSource>();
+        cb               = GetComponent<ControllerButton>();
+        startButton      = GameObject.Find("/Canvas/StartButton").GetComponent<Button>();
+        exitButton       = GameObject.Find("/Canvas/ExitButton").GetComponent<Button>();
+        tutorialButton   = GameObject.Find("/Canvas/TutorialButton").GetComponent<Button>();
+        controllerButton = GameObject.Find("/Canvas/ControllerButton").GetComponent<Button>();
         startButton.Select();
     }
     private void Update()
     {
+        if (cb.ctrlFlag)
+            return;
         SelectButtonPos();
     }
     void SelectButtonPos()
@@ -61,4 +66,10 @@ public class TitleUIManager : MonoBehaviour
     {
         SceneManager.LoadScene("TutorialScene");
     }
+    public void OnControllerButton()
+    {
+        cb.ctrlFlag = true;
+        Debug.Log("a");
+    }
+
 }

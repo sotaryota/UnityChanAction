@@ -3466,7 +3466,7 @@ MonoBehaviour:
   - {fileID: 1659605874}
   - {fileID: 1429589666}
   - {fileID: 1988286794}
-  timeNum:
+  timeNum10:
   - {fileID: 646905656}
   - {fileID: 1029588630}
   - {fileID: 415395793}
@@ -3477,7 +3477,7 @@ MonoBehaviour:
   - {fileID: 1441513643}
   - {fileID: 2079033253}
   - {fileID: 2032670731}
-  timeNum2:
+  timeNum1:
   - {fileID: 745986911}
   - {fileID: 1275551206}
   - {fileID: 20568074}
