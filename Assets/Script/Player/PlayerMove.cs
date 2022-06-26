@@ -129,7 +129,6 @@ public class PlayerMove : MonoBehaviour
         }
         if (other.gameObject.tag == "Tutorial" && tutorialManager.imageNum < 3)
         {
-            tutorialManager.imageNum++;
             tutorialManager.tutorialFlag = true;
             other.gameObject.SetActive(false);
         }

@@ -56,32 +56,27 @@ public class TutorialManager : MonoBehaviour
 
                 if (gamepad.buttonSouth.wasPressedThisFrame)
                 {
-                    tutorialImage[imageNum].SetActive(false);
-                    imageNum++;
-                    tutorialImage[imageNum].SetActive(true);
-                }
-                else
-                {
-                    return;
+                    if (imageNum + 1 == tutorialImage.Length)
+                    {
+                        tutorialFlag = false;
+                        Time.timeScale = 1f;
+                        bgm.volume = 0.05f;
+
+                        tutorialPanel.SetActive(false);
+                        StartCoroutine("PauseWaiting");
+                    }
+                    else
+                    {
+                        tutorialImage[imageNum].SetActive(false);
+                        imageNum++;
+                        tutorialImage[imageNum].SetActive(true);
+                    }
                 }
             }
-            else
-            {
-                if (gamepad.buttonSouth.wasPressedThisFrame)
-                {
-                    tutorialFlag = false;
-                    Time.timeScale = 1f;
-                    bgm.volume = 0.05f;
-
-                    tutorialPanel.SetActive(false);
-                    StartCoroutine("PauseWait");
-                }
-            }
-
         }
     }
-    IEnumerator PauseWait()
+    IEnumerator PauseWaiting()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
     }
 }
