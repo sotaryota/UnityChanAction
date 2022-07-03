@@ -74,55 +74,70 @@ public class MainUIManager : MonoBehaviour
         ItemCount();
         TimeCount();
     }
+
     //////////////////////////////////
 
     //セレクト中のボタンがわかる処理
 
     //////////////////////////////////
+
     void SelectButtonPos()
     {
+        //現在選択中のボタン
         nowButton = EventSystem.current.currentSelectedGameObject;
+        //一度だけ行う処理
         if (initial)
         {
+            //とりあえず現在のボタンを保存
             beforeButton = nowButton;
+            //アイコンの初期位置を決める
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
             initial = false;
         }
-        if(nowButton != beforeButton)
+        //現在選択しているボタンが保存したボタンと違うなら
+        if (nowButton != beforeButton)
         {
+            //アイコンの位置を変更
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
             select.PlayOneShot(selectSE);
+            //現在のボタンを保存
             beforeButton = nowButton;
         }
-
     }
-
+    
     //////////////////////////////////
 
     //タイムの表示とカウント
 
     //////////////////////////////////
+
     void TimeCount()
     {
+        //タイムが99未満の時のみ加算
         if (nowTime < 99)
         {
             nowTime += Time.deltaTime;
+            //一秒が経過したかどうか
             if ((int)nowTime != befTime)
             {
-                timeNum10[(int)(befTime/10) % 10].SetActive(false);
-                timeNum10[(int)(nowTime/10) % 10].SetActive(true);
-
+                //一桁目
                 timeNum1[(int)befTime % 10].SetActive(false);
                 timeNum1[(int)nowTime % 10].SetActive(true);
+                //2桁目
+                timeNum10[(int)(befTime / 10) % 10].SetActive(false);
+                timeNum10[(int)(nowTime / 10) % 10].SetActive(true);
+                //現在のタイムを保存
                 befTime = (int)nowTime;
             }
         }
     }
+
     //////////////////////////////////
 
     //アイテム獲得数
 
     //////////////////////////////////
+
     void ItemCount()
     {
         if(itemScore != befScore)
@@ -132,21 +147,25 @@ public class MainUIManager : MonoBehaviour
             befScore = itemScore; 
         }
     }
-    //////////////////////////////////
-
-    //ポーズ解除時にジャンプしないための処理
 
     //////////////////////////////////
+
+    //ポーズ解除時にジャンプしないためのコルーチン
+
+    //////////////////////////////////
+    
     IEnumerator PauseWait()
     {
         yield return new WaitForSeconds(0.1f);
         pause = false;
     }
+
     //////////////////////////////////
 
     //メニュー画面のON・OFF
 
     //////////////////////////////////
+
     void MenuDisplay() 
     {
         if (gamepad.startButton.wasPressedThisFrame)
@@ -172,11 +191,13 @@ public class MainUIManager : MonoBehaviour
             }
         }
     }
+
     //////////////////////////////////
 
     //ボタンの処理
 
     //////////////////////////////////
+
     public void OnReturnButton()
     {
         panelFlag = false;

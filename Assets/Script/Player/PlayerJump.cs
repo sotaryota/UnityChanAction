@@ -9,6 +9,7 @@ public class PlayerJump : MonoBehaviour
     Gamepad gamepad;
     GoalProcess goal;
     PlayerAnimation playerAnimation;
+    TutorialManager tutorialManager;
     MainUIManager ui;
 
     [Header("Ground Check Sphere")]
@@ -26,12 +27,15 @@ public class PlayerJump : MonoBehaviour
         rb              = GetComponent<Rigidbody>();
         playerAnimation = GetComponent<PlayerAnimation>();
         goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
+        tutorialManager = GameObject.Find("UIManager").GetComponent<TutorialManager>();
         ui              = GameObject.Find("UIManager").GetComponent<MainUIManager>();
     }
     // Update is called once per frame
     private void Update()
     {
         if (ui.pause)
+            return;
+        if (tutorialManager.tutorialFlag)
             return;
 
         if (goal.goalFlag)
