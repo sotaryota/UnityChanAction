@@ -15,7 +15,7 @@ public class PlayerJump : MonoBehaviour
     [Header("Ground Check Sphere")]
     public LayerMask groundMask;             //地面レイヤー
     [SerializeField] float playerThicness;   //スフィアの半径
-    public bool isGround;                    //地面との接触判定
+    [SerializeField] bool isGround;
 
     [Header("Jump")]
     [SerializeField] float jumpPow;          //ジャンプ力
@@ -37,55 +37,41 @@ public class PlayerJump : MonoBehaviour
             return;
         if (tutorialManager.tutorialFlag)
             return;
-
         if (goal.goalFlag)
-        {
-            playerAnimation.fall = false;
             return;
-        }
-
-        if(gamepad == null)
-        gamepad = Gamepad.current;
-
+        if (gamepad == null)
+            gamepad = Gamepad.current;
         IsJump();
     }
     private void FixedUpdate()
     {
-        //ジャンプボタンが押されているか
-        if(isJump)
-        {
-            rb.AddForce(jumpPow * Vector3.up, ForceMode.Impulse);
-            playerAnimation.fall = true;
-        }
     }
+
     //////////////////////////////////
 
     //接地判定
 
     //////////////////////////////////
-    bool IsGround()
+    
+    public bool IsGround()
     {
         return Physics.CheckSphere(transform.position, playerThicness, groundMask);
     }
+
     //////////////////////////////////
 
     //ジャンプする
 
     //////////////////////////////////
+   
     void IsJump()
     {
         if (IsGround())
         {
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
-                isJump = true;
+                rb.AddForce(jumpPow * Vector3.up, ForceMode.Impulse);
             }
-            playerAnimation.fall = false;
-        }
-        else
-        {
-            isJump = false;
-            playerAnimation.fall = true;
         }
     }
 }

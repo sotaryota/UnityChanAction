@@ -1927,6 +1927,8 @@ MonoBehaviour:
   onBlock: {fileID: 0}
   walkSpeed: 75
   runSpeed: 150
+  isWalk: 0
+  isRun: 0
 --- !u!82 &300426526
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2040,7 +2042,7 @@ MonoBehaviour:
     m_Bits: 8
   playerThicness: 0.1
   isGround: 0
-  jumpPow: 2.5
+  jumpPow: 5
   isJump: 0
 --- !u!114 &300426528
 MonoBehaviour:
@@ -2054,9 +2056,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc23640646f1dda4fb931f7b56affe48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  run: 0
-  walk: 0
-  fall: 0
 --- !u!54 &300426529
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3802,6 +3801,7 @@ GameObject:
   - component: {fileID: 670115288}
   - component: {fileID: 670115287}
   - component: {fileID: 670115289}
+  - component: {fileID: 670115290}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -3976,6 +3976,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &670115290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670115286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 883a3b16320e52146bd162515540b218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAudio: {fileID: 0}
+  bgm: {fileID: 0}
+  tutorialPanel: {fileID: 0}
+  tutorialImage: []
+  imageNum: 0
+  tutorialFlag: 0
 --- !u!1001 &679840422
 PrefabInstance:
   m_ObjectHideFlags: 0

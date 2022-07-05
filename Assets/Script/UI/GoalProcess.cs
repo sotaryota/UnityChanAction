@@ -9,12 +9,13 @@ public class GoalProcess : MonoBehaviour
     Gamepad gamepad;
 
     public bool goalFlag = false;
+
     [SerializeField] private GameObject goalScorePanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        goalScorePanel.SetActive(false);
+        //goalScorePanel.SetActive(false);
     }
 
     // Update is called once per frame

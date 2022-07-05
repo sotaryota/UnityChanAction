@@ -21,7 +21,10 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         playerAudio = GameObject.Find("player").GetComponent<AudioSource>();
-        tutorialPanel.SetActive(false);
+
+        if(tutorialPanel!= null)
+            tutorialPanel.SetActive(false);
+        
         for (int i = 1; i < tutorialImage.Length; ++i)
         {
             tutorialImage[i].SetActive(false);

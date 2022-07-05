@@ -131,6 +131,7 @@ public class TitleUIManager : MonoBehaviour
     //ボタン判定が重複しないためのコルーチン
 
     //////////////////////////////////
+    
     IEnumerator PanelTureWait()
     {
         yield return new WaitForSeconds(0.1f);

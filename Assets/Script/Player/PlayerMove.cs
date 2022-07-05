@@ -24,6 +24,8 @@ public class PlayerMove : MonoBehaviour
     private float speed;                  //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
+    public bool isWalk;
+    public bool isRun;
 
     // Start is called before the first frame update
     void Start()
@@ -39,16 +41,27 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (goal.goalFlag)
-        {
-            playerAnimation.walk = false;
-            playerAnimation.run  = false;
+        if (goal.goalFlag)    
             return;
-        }
+    
 
         gamepad = Gamepad.current;
         if (gamepad == null) return;
 
+        PlayerWalkANDRun();
+        PlayerForward();
+
+        rb.AddForce(moveDirection);
+    }
+
+    //////////////////////////////////
+
+    //プレイヤの移動処理
+
+    //////////////////////////////////
+    
+    void PlayerWalkANDRun()
+    {
         horizontal = gamepad.leftStick.x.ReadValue();
         vertical = gamepad.leftStick.y.ReadValue();
 
@@ -57,34 +70,30 @@ public class PlayerMove : MonoBehaviour
         {
             if (gamepad.rightShoulder.isPressed && RunFlag(-0.7f, 0.7f, -0.7f, 0.7f))
             { //走る
-                playerAnimation.run = true;
-                playerAnimation.walk = false;
                 speed = runSpeed;
+                isWalk = false;
+                isRun = true;
             }
             else
             { //歩く
-                playerAnimation.walk = true;
-                playerAnimation.run = false;
-                speed = walkSpeed;
+                speed  = walkSpeed;
+                isWalk = true;
+                isRun = false;
             }
-
-            //StairsCheck();
         }
         else
         {
-            playerAnimation.run = false;
-            playerAnimation.walk = false;
+            isWalk = false;
+            isRun = false;
         }
-
-        PlayerForward();
-
-        rb.AddForce(moveDirection);
     }
+
     //////////////////////////////////
 
     //プレイヤの向きをカメラの方向に合わせる処理
 
     //////////////////////////////////
+    
     void PlayerForward()
     {
         // カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -102,20 +111,24 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(moveForward); ;
         }
     }
+
     //////////////////////////////////
 
     //スティック入力の大きさでダッシュするか判定
 
     //////////////////////////////////
+   
     bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
     {
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
     }
+
     //////////////////////////////////
 
     //オブジェクトとの接触判定
 
     //////////////////////////////////
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Item")

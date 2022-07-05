@@ -6,22 +6,62 @@ public class PlayerAnimation : MonoBehaviour
 {
     Animator animator;
 
-    public bool run = false;   //ëñÇÈ
-    public bool walk = false;  //ï‡Ç≠
-    public bool fall = false;Å@//óéâ∫
+    PlayerMove   playerMove;
+    PlayerJump   playerJump;
+    GoalProcess  goal;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator    = GetComponent<Animator>();
+        playerMove  = GetComponent<PlayerMove>();
+        playerJump  = GetComponent<PlayerJump>();
+        goal        = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool("Run", run);
-        animator.SetBool("Walking", walk);
-        animator.SetBool("JumpFall", fall);
+        if (goal.goalFlag)
+        {
+            animator.SetBool("Walking", false);
+            animator.SetBool("Run", false);
+            animator.SetBool("JumpFall", false);
+            return;
+        }
+        AnimationMove();
+        AnimationJumpFall();
+    }
+
+    private void AnimationMove()
+    {
+        if (playerMove.isWalk)
+        {
+            animator.SetBool("Walking", true);
+            animator.SetBool("Run", false);
+        }
+        else if (playerMove.isRun)
+        {
+            animator.SetBool("Walking", false);
+            animator.SetBool("Run", true);
+        }
+        else
+        {
+            animator.SetBool("Walking", false);
+            animator.SetBool("Run", false);
+        }
+    
+    }
+    void AnimationJumpFall()
+    {
+        if(!playerJump.IsGround())
+        {
+            animator.SetBool("JumpFall", true);
+        }
+        else
+        {
+            animator.SetBool("JumpFall", false);
+        }
     }
 }

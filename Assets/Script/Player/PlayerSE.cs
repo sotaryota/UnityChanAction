@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSE : MonoBehaviour
 {
-    PlayerAnimation playerAnimation;
+    PlayerMove playermove;
     PlayerJump playerJump;
     GoalProcess goal;
     
@@ -19,7 +19,7 @@ public class PlayerSE : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerAnimation = GetComponent<PlayerAnimation>();
+        playermove = GetComponent<PlayerMove>();
         playerJump      = GetComponent<PlayerJump>();
         goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
         audio           = GetComponent<AudioSource>();
@@ -28,9 +28,9 @@ public class PlayerSE : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerAnimation.walk)
+        if(playermove.isWalk)
         {
-            if(playerJump.isGround)
+            if(playerJump.IsGround())
             {
                 if (IsWalkSE)
                 {
@@ -39,7 +39,7 @@ public class PlayerSE : MonoBehaviour
                 StartCoroutine("WalkSE");
             }
         }
-        if(playerAnimation.run && playerJump.isGround)
+        if(playermove.isRun && playerJump.IsGround())
         {
             if(IsRunSE)
             {
