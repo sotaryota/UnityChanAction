@@ -7,20 +7,29 @@ public class PlayerMove : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
+    [Header("スクリプト")]
+    [SerializeField]
     PlayerAnimation playerAnimation;
+    [SerializeField]
     TutorialManager tutorialManager;
-     GoalProcess goal;
+    [SerializeField]
+    GoalProcess goal;
+    [SerializeField]
     MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
 
     [Header("プレイヤ情報")]
-    [SerializeField] GameObject startPos; //キャラの初期位置
-    [SerializeField] GameObject onBlock;  //プレイヤが乗っているブロック
+    [SerializeField]
+    GameObject startPos; //キャラの初期位置
+    [SerializeField]
+    GameObject onBlock;  //プレイヤが乗っているブロック
     private Vector3 moveDirection;        //プレイヤの移動量
-    [SerializeField] float walkSpeed; 　  //歩行時の移動スピード
-    [SerializeField] float runSpeed; 　   //走行時の移動スピード
+    [SerializeField]
+    float walkSpeed; 　  //歩行時の移動スピード
+    [SerializeField] 
+    float runSpeed; 　   //走行時の移動スピード
     private float speed;                  //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
@@ -33,9 +42,9 @@ public class PlayerMove : MonoBehaviour
         transform.position = startPos.transform.position;
         playerAnimation    = GetComponent<PlayerAnimation>();
         rb                 = GetComponent<Rigidbody>();
-        ui                 = GameObject.Find("UIManager").GetComponent<MainUIManager>();
-        tutorialManager    = GameObject.Find("UIManager").GetComponent<TutorialManager>();
-        goal               = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
+        ui                 = GetComponent<MainUIManager>();
+        tutorialManager    = GetComponent<TutorialManager>();
+        goal               = GetComponent<GoalProcess>();
     }
 
     // Update is called once per frame

@@ -10,7 +10,7 @@ public class GoalProcess : MonoBehaviour
 
     public bool goalFlag = false;
 
-    [SerializeField] private GameObject goalScorePanel;
+   // [SerializeField] private GameObject goalScorePanel;
 
     // Start is called before the first frame update
     void Start()
