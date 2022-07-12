@@ -7,14 +7,11 @@ public class PlayerMove : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
+
     [Header("スクリプト")]
-    [SerializeField]
     PlayerAnimation playerAnimation;
-    [SerializeField]
     TutorialManager tutorialManager;
-    [SerializeField]
     GoalProcess goal;
-    [SerializeField]
     MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
@@ -42,9 +39,9 @@ public class PlayerMove : MonoBehaviour
         transform.position = startPos.transform.position;
         playerAnimation    = GetComponent<PlayerAnimation>();
         rb                 = GetComponent<Rigidbody>();
-        ui                 = GetComponent<MainUIManager>();
-        tutorialManager    = GetComponent<TutorialManager>();
-        goal               = GetComponent<GoalProcess>();
+        ui                 = GameObject.Find("UIManager").GetComponent<MainUIManager>();
+        tutorialManager    = GameObject.Find("UIManager").GetComponent<TutorialManager>();
+        goal               = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
     }
 
     // Update is called once per frame
@@ -60,7 +57,6 @@ public class PlayerMove : MonoBehaviour
         PlayerWalkANDRun();
         PlayerForward();
 
-        rb.AddForce(moveDirection);
     }
 
     //////////////////////////////////
@@ -105,20 +101,23 @@ public class PlayerMove : MonoBehaviour
     
     void PlayerForward()
     {
-        // カメラの方向から、X-Z平面の単位ベクトルを取得
+        //カメラの方向から、X-Z平面の単位ベクトルを取得
         cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
-        // 方向キーの入力値とカメラの向きから、移動方向を決定
+        //方向キーの入力値とカメラの向きから、移動方向を決定
         moveForward = cameraForward * vertical + Camera.main.transform.right * horizontal;
 
-        // 移動方向にスピードを掛ける
+        //移動方向にスピードを掛ける
         moveDirection = moveForward * speed;
 
-        // キャラクターの向きを進行方向に
+        //キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(moveForward); ;
         }
+
+        //移動させる
+        rb.AddForce(moveDirection);
     }
 
     //////////////////////////////////
