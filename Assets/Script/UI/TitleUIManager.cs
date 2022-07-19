@@ -74,7 +74,6 @@ public class TitleUIManager : MonoBehaviour
             //Œ»İ‚Ìƒ{ƒ^ƒ“‚ğ•Û‘¶
             beforeButton = nowButton;
         }
-
     }
 
     //////////////////////////////////

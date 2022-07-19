@@ -7,7 +7,7 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
-    GoalProcess goal;
+    GoalManager goal;
     PlayerAnimation playerAnimation;
     TutorialManager tutorialManager;
     MainUIManager ui;
@@ -26,7 +26,7 @@ public class PlayerJump : MonoBehaviour
     {
         rb              = GetComponent<Rigidbody>();
         playerAnimation = GetComponent<PlayerAnimation>();
-        goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
+        goal            = GameObject.Find("GoalManager").GetComponent<GoalManager>();
         tutorialManager = GameObject.Find("UIManager").GetComponent<TutorialManager>();
         ui              = GameObject.Find("UIManager").GetComponent<MainUIManager>();
     }

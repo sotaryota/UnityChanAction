@@ -6,7 +6,7 @@ public class PlayerSE : MonoBehaviour
 {
     PlayerMove playermove;
     PlayerJump playerJump;
-    GoalProcess goal;
+    GoalManager goal;
     
     AudioSource audio;
     [SerializeField] AudioClip walkSE;
@@ -21,7 +21,7 @@ public class PlayerSE : MonoBehaviour
     {
         playermove = GetComponent<PlayerMove>();
         playerJump      = GetComponent<PlayerJump>();
-        goal            = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
+        goal            = GameObject.Find("GoalManager").GetComponent<GoalManager>();
         audio           = GetComponent<AudioSource>();
     }
 

@@ -12,6 +12,7 @@ TagManager:
   - Item
   - Goal
   - Tutorial
+  - Dath
   layers:
   - Default
   - TransparentFX

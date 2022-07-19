@@ -11,7 +11,7 @@ public class PlayerMove : MonoBehaviour
     [Header("スクリプト")]
     PlayerAnimation playerAnimation;
     TutorialManager tutorialManager;
-    GoalProcess goal;
+    GoalManager goal;
     MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
@@ -41,7 +41,7 @@ public class PlayerMove : MonoBehaviour
         rb                 = GetComponent<Rigidbody>();
         ui                 = GameObject.Find("UIManager").GetComponent<MainUIManager>();
         tutorialManager    = GameObject.Find("UIManager").GetComponent<TutorialManager>();
-        goal               = GameObject.Find("GoalManager").GetComponent<GoalProcess>();
+        goal               = GameObject.Find("GoalManager").GetComponent<GoalManager>();
     }
 
     // Update is called once per frame
@@ -142,7 +142,7 @@ public class PlayerMove : MonoBehaviour
         if (other.gameObject.tag == "Item")
         {
             Destroy(other.gameObject);
-            ui.itemScore++;
+            ui.itemNum++;
         }
         if (other.gameObject.tag == "Goal")
         {
@@ -156,7 +156,7 @@ public class PlayerMove : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Sea")
+        if (collision.gameObject.tag == "Dath")
         {
             transform.position = startPos.transform.position;
         }

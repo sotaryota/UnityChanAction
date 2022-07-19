@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 public class MainUIManager : MonoBehaviour
 {
     Gamepad gamepad;
+    GoalManager goal;
     public bool pause = false;
 
     [Header("Audio")]
@@ -18,7 +19,7 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] AudioSource bgm;
 
     [Header("Main Menu")]
-    [SerializeField] GameObject panel;         //メニュー画面用のパネル
+    [SerializeField] GameObject menuPanel;         //メニュー画面用のパネル
     private bool panelFlag;                    //パネルのオン・オフ
     [SerializeField] Button returnButton;      //ゲームに戻る
     [SerializeField] Button restartButton;     //再スタート
@@ -32,15 +33,12 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] Vector3 selectIconPos;    //選択アイコンの位置
 
     [Header("Item")]
-    private int befScore = 0;                  //ひとつ前の獲得アイテム数
-    public int itemScore = 0;                  //現在の獲得アイテム数
-    [SerializeField] GameObject[] itemPoeces;  //スコアのスプライト
+    public int itemNum = 0;                    //現在の獲得アイテム数
+    public Text itemText;
 
     [Header("Time")]
-    private int befTime = 0;                   //ひとつ前のタイム
-    private float nowTime = 0f;                //現在のタイム
-    [SerializeField] GameObject[] timeNum10;   //時間(2桁目)
-    [SerializeField] GameObject[] timeNum1;    //時間(1桁目)
+    public float nowTime = 99f;                //現在のタイム
+    public Text timeText;
 
     // Start is called before the first frame update
     void Start()
@@ -48,17 +46,13 @@ public class MainUIManager : MonoBehaviour
         select        = GetComponent<AudioSource>();
         playerAudio   = GameObject.Find("player").GetComponent<AudioSource>();
         bgm           = GameObject.Find("MainCamera").GetComponent<AudioSource>();
+        goal          = GameObject.Find("GoalManager").GetComponent<GoalManager>();
         returnButton  = GameObject.Find("/Canvas/MainMenuPanel/ReturnButton").GetComponent<Button>();
         restartButton = GameObject.Find("/Canvas/MainMenuPanel/RestartButton").GetComponent<Button>();
         titleButton   = GameObject.Find("/Canvas/MainMenuPanel/TitleButton").GetComponent<Button>();
         exitButton    = GameObject.Find("/Canvas/MainMenuPanel/ExitButton").GetComponent<Button>();
-        panel.SetActive(false); 
-        for(int i = 1;i <= 9;++i)
-        {
-            itemPoeces[i].SetActive(false);
-            timeNum10[i].SetActive(false);
-            timeNum1[i].SetActive(false);
-        }
+        menuPanel.SetActive(false); 
+        
         returnButton.Select();
         nowScene = SceneManager.GetActiveScene();
     }
@@ -68,7 +62,8 @@ public class MainUIManager : MonoBehaviour
     {
         if (gamepad == null)
             gamepad = Gamepad.current;
-        
+        if (goal.goalFlag)
+            return;
         MenuDisplay();
         SelectButtonPos();
         ItemCount();
@@ -113,44 +108,29 @@ public class MainUIManager : MonoBehaviour
 
     void TimeCount()
     {
-        //タイムが99未満の時のみ加算
-        if (nowTime < 99)
+        //タイムが99未満の時のみ減算
+        if (nowTime > 0)
         {
-            nowTime += Time.deltaTime;
-            //一秒が経過したかどうか
-            if ((int)nowTime != befTime)
-            {
-                //一桁目
-                timeNum1[(int)befTime % 10].SetActive(false);
-                timeNum1[(int)nowTime % 10].SetActive(true);
-                //2桁目
-                timeNum10[(int)(befTime / 10) % 10].SetActive(false);
-                timeNum10[(int)(nowTime / 10) % 10].SetActive(true);
-                //現在のタイムを保存
-                befTime = (int)nowTime;
-            }
+            nowTime -= Time.deltaTime;
         }
+        int second = (int)nowTime;
+        timeText.text = "タイム\n" + second.ToString();
     }
 
     //////////////////////////////////
 
-    //アイテム獲得数
+    //アイテム獲得数表示
 
     //////////////////////////////////
 
     void ItemCount()
     {
-        if(itemScore != befScore)
-        {
-            itemPoeces[befScore].SetActive(false);
-            itemPoeces[itemScore].SetActive(true);
-            befScore = itemScore; 
-        }
+        itemText.text = itemNum.ToString() + "個";
     }
 
     //////////////////////////////////
 
-    //ポーズ解除時にジャンプしないためのコルーチン
+    //ポーズ解除時にジャンプしないための処理
 
     //////////////////////////////////
     
@@ -176,7 +156,7 @@ public class MainUIManager : MonoBehaviour
                 playerAudio.Stop();
                 bgm.volume = 0.01f;
 
-                panel.SetActive(true);
+                menuPanel.SetActive(true);
                 panelFlag = true;
                 pause = true;
             }
@@ -185,7 +165,7 @@ public class MainUIManager : MonoBehaviour
                 Time.timeScale = 1f;
                 bgm.volume = 0.05f;
 
-                panel.SetActive(false);
+                menuPanel.SetActive(false);
                 panelFlag = false;
                 StartCoroutine("PauseWait");
             }
@@ -202,7 +182,7 @@ public class MainUIManager : MonoBehaviour
     {
         panelFlag = false;
         StartCoroutine("PauseWait");
-        panel.SetActive(false);
+        menuPanel.SetActive(false);
         bgm.volume = 0.05f;
         Time.timeScale = 1;
     }
