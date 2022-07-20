@@ -24,7 +24,7 @@ public class TitleUIManager : MonoBehaviour
     private GameObject nowButton;                //現在選択中のボタン
     private GameObject beforeButton;             //ひとつ前に選択していたボタン
     public bool ctrlFlag = false;
-    private bool initial = true;               //一度だけ処理をするための変数
+    private bool initial = true;                 //一度だけ処理をするための変数
 
     private void Start()
     {

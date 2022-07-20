@@ -7,10 +7,10 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
-    GoalManager goal;
     PlayerAnimation playerAnimation;
-    TutorialManager tutorialManager;
-    MainUIManager ui;
+    [SerializeField] GoalManager goal;
+    [SerializeField] TutorialManager tutorialManager;
+    [SerializeField] MainUIManager ui;
 
     [Header("Ground Check Sphere")]
     public LayerMask groundMask;             //ínñ ÉåÉCÉÑÅ[
@@ -26,25 +26,19 @@ public class PlayerJump : MonoBehaviour
     {
         rb              = GetComponent<Rigidbody>();
         playerAnimation = GetComponent<PlayerAnimation>();
-        goal            = GameObject.Find("GoalManager").GetComponent<GoalManager>();
-        tutorialManager = GameObject.Find("UIManager").GetComponent<TutorialManager>();
-        ui              = GameObject.Find("UIManager").GetComponent<MainUIManager>();
+        ui              = ui.GetComponent<MainUIManager>();
+        goal            = goal.GetComponent<GoalManager>();
+        tutorialManager = tutorialManager.GetComponent<TutorialManager>();
     }
     // Update is called once per frame
     private void Update()
     {
-        if (ui.pause)
-            return;
-        if (tutorialManager.tutorialFlag)
-            return;
-        if (goal.goalFlag)
-            return;
+        if (ui.pause || tutorialManager.tutorialFlag || goal.goalFlag) { return; }
+
         if (gamepad == null)
             gamepad = Gamepad.current;
+
         IsJump();
-    }
-    private void FixedUpdate()
-    {
     }
 
     //////////////////////////////////

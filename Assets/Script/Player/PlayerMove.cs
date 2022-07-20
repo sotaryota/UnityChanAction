@@ -10,23 +10,19 @@ public class PlayerMove : MonoBehaviour
 
     [Header("スクリプト")]
     PlayerAnimation playerAnimation;
-    TutorialManager tutorialManager;
-    GoalManager goal;
-    MainUIManager ui;
+    [SerializeField] TutorialManager tutorialManager;
+    [SerializeField] GoalManager goal;
+    [SerializeField] MainUIManager ui;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
 
     [Header("プレイヤ情報")]
-    [SerializeField]
-    GameObject startPos; //キャラの初期位置
-    [SerializeField]
-    GameObject onBlock;  //プレイヤが乗っているブロック
+    [SerializeField] GameObject startPos; //キャラの初期位置
+    [SerializeField] GameObject onBlock;  //プレイヤが乗っているブロック
     private Vector3 moveDirection;        //プレイヤの移動量
-    [SerializeField]
-    float walkSpeed; 　  //歩行時の移動スピード
-    [SerializeField] 
-    float runSpeed; 　   //走行時の移動スピード
+    [SerializeField] float walkSpeed; 　  //歩行時の移動スピード
+    [SerializeField] float runSpeed; 　   //走行時の移動スピード
     private float speed;                  //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
@@ -39,9 +35,9 @@ public class PlayerMove : MonoBehaviour
         transform.position = startPos.transform.position;
         playerAnimation    = GetComponent<PlayerAnimation>();
         rb                 = GetComponent<Rigidbody>();
-        ui                 = GameObject.Find("UIManager").GetComponent<MainUIManager>();
-        tutorialManager    = GameObject.Find("UIManager").GetComponent<TutorialManager>();
-        goal               = GameObject.Find("GoalManager").GetComponent<GoalManager>();
+        ui                 = ui.GetComponent<MainUIManager>();
+        goal               = goal.GetComponent<GoalManager>(); 
+        tutorialManager    = tutorialManager.GetComponent<TutorialManager>();
     }
 
     // Update is called once per frame
@@ -141,8 +137,9 @@ public class PlayerMove : MonoBehaviour
     {
         if (other.gameObject.tag == "Item")
         {
-            Destroy(other.gameObject);
             ui.itemNum++;
+
+            Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Goal")
         {

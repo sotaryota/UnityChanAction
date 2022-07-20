@@ -8,7 +8,7 @@ public class PlayerAnimation : MonoBehaviour
 
     PlayerMove   playerMove;
     PlayerJump   playerJump;
-    GoalManager goal;
+    [SerializeField] GoalManager goal;
 
 
     // Start is called before the first frame update
@@ -17,7 +17,7 @@ public class PlayerAnimation : MonoBehaviour
         animator    = GetComponent<Animator>();
         playerMove  = GetComponent<PlayerMove>();
         playerJump  = GetComponent<PlayerJump>();
-        goal        = GameObject.Find("GoalManager").GetComponent<GoalManager>();
+        goal        = goal.GetComponent<GoalManager>();
     }
 
     // Update is called once per frame

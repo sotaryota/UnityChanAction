@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class MainUIManager : MonoBehaviour
 {
     Gamepad gamepad;
-    GoalManager goal;
+    [SerializeField] GoalManager goal;
     public bool pause = false;
 
     [Header("Audio")]
@@ -44,9 +44,9 @@ public class MainUIManager : MonoBehaviour
     void Start()
     {
         select        = GetComponent<AudioSource>();
-        playerAudio   = GameObject.Find("player").GetComponent<AudioSource>();
-        bgm           = GameObject.Find("MainCamera").GetComponent<AudioSource>();
-        goal          = GameObject.Find("GoalManager").GetComponent<GoalManager>();
+        playerAudio   = playerAudio.GetComponent<AudioSource>();
+        bgm           = bgm.GetComponent<AudioSource>();
+        goal          = goal.GetComponent<GoalManager>();
         returnButton  = GameObject.Find("/Canvas/MainMenuPanel/ReturnButton").GetComponent<Button>();
         restartButton = GameObject.Find("/Canvas/MainMenuPanel/RestartButton").GetComponent<Button>();
         titleButton   = GameObject.Find("/Canvas/MainMenuPanel/TitleButton").GetComponent<Button>();
@@ -62,8 +62,7 @@ public class MainUIManager : MonoBehaviour
     {
         if (gamepad == null)
             gamepad = Gamepad.current;
-        if (goal.goalFlag)
-            return;
+        if (goal.goalFlag){ return; }
         MenuDisplay();
         SelectButtonPos();
         ItemCount();

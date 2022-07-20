@@ -20,7 +20,7 @@ public class TutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerAudio = GameObject.Find("player").GetComponent<AudioSource>();
+        playerAudio = playerAudio.GetComponent<AudioSource>();
 
         if(tutorialPanel!= null)
             tutorialPanel.SetActive(false);

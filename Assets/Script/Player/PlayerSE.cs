@@ -6,7 +6,7 @@ public class PlayerSE : MonoBehaviour
 {
     PlayerMove playermove;
     PlayerJump playerJump;
-    GoalManager goal;
+    [SerializeField] GoalManager goal;
     
     AudioSource audio;
     [SerializeField] AudioClip walkSE;
@@ -19,10 +19,10 @@ public class PlayerSE : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playermove = GetComponent<PlayerMove>();
+        playermove      = GetComponent<PlayerMove>();
         playerJump      = GetComponent<PlayerJump>();
-        goal            = GameObject.Find("GoalManager").GetComponent<GoalManager>();
         audio           = GetComponent<AudioSource>();
+        goal            = goal.GetComponent<GoalManager>();
     }
 
     // Update is called once per frame

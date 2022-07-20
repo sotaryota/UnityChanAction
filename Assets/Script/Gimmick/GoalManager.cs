@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class GoalManager : MonoBehaviour
 {
     Gamepad gamepad;
-    MainUIManager mainUI;
+    [SerializeField] MainUIManager mainUI;
 
     public bool goalFlag = false;
     private bool initial = true;
@@ -29,7 +29,7 @@ public class GoalManager : MonoBehaviour
 
     void Start()
     {
-        mainUI = GameObject.Find("UIManager").GetComponent<MainUIManager>();
+        mainUI = mainUI.GetComponent<MainUIManager>();
         goalPanel.SetActive(false);
     }
 

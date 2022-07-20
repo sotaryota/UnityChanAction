@@ -1474,6 +1474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4826bfc785a547c43b9a351f0b840d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goal: {fileID: 932608673}
   walkSE: {fileID: 8300000, guid: af1d5ef55dd1f34468331c0a8819a4b1, type: 3}
   runWait: 0.4
   walkWait: 0.6
@@ -1509,6 +1510,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5063596b0eae9e4459a0b75b81c0cc51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialManager: {fileID: 670115290}
+  goal: {fileID: 932608673}
+  ui: {fileID: 670115287}
   startPos: {fileID: 1817507775}
   onBlock: {fileID: 0}
   walkSpeed: 75
@@ -1623,6 +1627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd2298b387c3ab46b3bcf0e3c701efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goal: {fileID: 932608673}
+  tutorialManager: {fileID: 670115290}
+  ui: {fileID: 670115287}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -1642,6 +1649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc23640646f1dda4fb931f7b56affe48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goal: {fileID: 932608673}
 --- !u!54 &300426529
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3131,6 +3139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6802bc2695bb4ae4f9608a8e1f0f1e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goal: {fileID: 932608673}
   pause: 0
   selectSE: {fileID: 8300000, guid: b4181114552491043b36803f61b34efb, type: 3}
   playerAudio: {fileID: 300426526}
@@ -3269,8 +3278,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 883a3b16320e52146bd162515540b218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerAudio: {fileID: 0}
-  bgm: {fileID: 0}
+  playerAudio: {fileID: 300426526}
+  bgm: {fileID: 963194230}
   tutorialPanel: {fileID: 0}
   tutorialImage: []
   imageNum: 0
@@ -4322,6 +4331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c71e70a8930104d8fbbb91b1da1a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainUI: {fileID: 670115287}
   goalFlag: 0
   resultText: {fileID: 2072721517}
   gameUIPanel: {fileID: 1388411420}
