@@ -9,7 +9,7 @@ public class PlayerMove : MonoBehaviour
     Gamepad gamepad;
 
     [Header("スクリプト")]
-    PlayerAnimation playerAnimation;
+    PlayerStatus status;
     [SerializeField] TutorialManager tutorialManager;
     [SerializeField] GoalManager goal;
     [SerializeField] MainUIManager ui;
@@ -21,9 +21,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] GameObject startPos; //キャラの初期位置
     [SerializeField] GameObject onBlock;  //プレイヤが乗っているブロック
     private Vector3 moveDirection;        //プレイヤの移動量
-    [SerializeField] float walkSpeed; 　  //歩行時の移動スピード
-    [SerializeField] float runSpeed; 　   //走行時の移動スピード
-    private float speed;                  //現在の移動スピード
+    private float nowSpeed;               //現在の移動スピード
     private float horizontal;             //LスティックX軸
     private float vertical;               //LスティックY軸
     public bool isWalk;
@@ -33,7 +31,7 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         transform.position = startPos.transform.position;
-        playerAnimation    = GetComponent<PlayerAnimation>();
+        status             = GetComponent<PlayerStatus>();
         rb                 = GetComponent<Rigidbody>();
         ui                 = ui.GetComponent<MainUIManager>();
         goal               = goal.GetComponent<GoalManager>(); 
@@ -43,24 +41,20 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (goal.goalFlag)    
-            return;
-    
+        //チュートリアル表示中出ないならreturn
+        if (goal.goalFlag) { return; }
 
-        gamepad = Gamepad.current;
-        if (gamepad == null) return;
+        if (gamepad == null)
+            gamepad = Gamepad.current;
 
         PlayerWalkANDRun();
         PlayerForward();
-
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //プレイヤの移動処理
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-    
     void PlayerWalkANDRun()
     {
         horizontal = gamepad.leftStick.x.ReadValue();
@@ -71,13 +65,13 @@ public class PlayerMove : MonoBehaviour
         {
             if (gamepad.rightShoulder.isPressed && RunFlag(-0.7f, 0.7f, -0.7f, 0.7f))
             { //走る
-                speed = runSpeed;
+                nowSpeed = status.getRunSpeed();
                 isWalk = false;
                 isRun = true;
             }
             else
             { //歩く
-                speed  = walkSpeed;
+                nowSpeed = status.getWalkSpeed();
                 isWalk = true;
                 isRun = false;
             }
@@ -89,12 +83,10 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //プレイヤの向きをカメラの方向に合わせる処理
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-    
     void PlayerForward()
     {
         //カメラの方向から、X-Z平面の単位ベクトルを取得
@@ -104,7 +96,7 @@ public class PlayerMove : MonoBehaviour
         moveForward = cameraForward * vertical + Camera.main.transform.right * horizontal;
 
         //移動方向にスピードを掛ける
-        moveDirection = moveForward * speed;
+        moveDirection = moveForward * nowSpeed;
 
         //キャラクターの向きを進行方向に
         if (moveForward != Vector3.zero)
@@ -116,23 +108,19 @@ public class PlayerMove : MonoBehaviour
         rb.AddForce(moveDirection);
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //スティック入力の大きさでダッシュするか判定
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-   
     bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
     {
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //オブジェクトとの接触判定
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-   
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Item")
@@ -145,7 +133,7 @@ public class PlayerMove : MonoBehaviour
         {
             goal.goalFlag = true;
         }
-        if (other.gameObject.tag == "Tutorial" && tutorialManager.imageNum < 3)
+        if (other.gameObject.tag == "Tutorial" && tutorialManager.imageNum < tutorialManager.tutorialImage.Length + 1)
         {
             tutorialManager.tutorialFlag = true;
             other.gameObject.SetActive(false);
@@ -158,6 +146,11 @@ public class PlayerMove : MonoBehaviour
             transform.position = startPos.transform.position;
         }
     }
+
+    //-----------------------------------------------------
+    //動く床に乗った時の処理
+    //-----------------------------------------------------
+
     void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "MoveBlock")

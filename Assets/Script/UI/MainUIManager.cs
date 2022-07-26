@@ -10,7 +10,6 @@ public class MainUIManager : MonoBehaviour
 {
     Gamepad gamepad;
     [SerializeField] GoalManager goal;
-    public bool pause = false;
 
     [Header("Audio")]
     private AudioSource select;
@@ -19,26 +18,28 @@ public class MainUIManager : MonoBehaviour
     [SerializeField] AudioSource bgm;
 
     [Header("Main Menu")]
-    [SerializeField] GameObject menuPanel;         //メニュー画面用のパネル
-    private bool panelFlag;                    //パネルのオン・オフ
+    [SerializeField] GameObject menuPanel;     //メニュー画面用のパネル
     [SerializeField] Button returnButton;      //ゲームに戻る
     [SerializeField] Button restartButton;     //再スタート
-    private Scene nowScene;                    //現在のシーン
     [SerializeField] Button titleButton;       //タイトルに戻る
     [SerializeField] Button exitButton;        //ゲーム終了
-    private GameObject nowButton;              //現在選択中のボタン
-    private GameObject beforeButton;           //ボタンを切り替えたかどうか
-    private bool initial = true;               //一度だけ処理をするための変数
     [SerializeField] GameObject selectIcon;    //選択アイコン
     [SerializeField] Vector3 selectIconPos;    //選択アイコンの位置
 
+    private Scene nowScene;                    //現在のシーン
+    private bool panelFlag;                    //パネルのオン・オフ
+    private GameObject nowButton;              //現在選択中のボタン
+    private GameObject beforeButton;           //ボタンを切り替えたかどうか
+    private bool initial = true;               //一度だけ処理をするための変数
+    public bool pause = false;                 //メニュー画面が開かれているか
+
     [Header("Item")]
     public int itemNum = 0;                    //現在の獲得アイテム数
-    public Text itemText;
+    public Text itemText;                      //獲得数の表示テキスト
 
     [Header("Time")]
     public float nowTime = 99f;                //現在のタイム
-    public Text timeText;
+    public Text timeText;                      //タイムの表示テキスト
 
     // Start is called before the first frame update
     void Start()
@@ -60,20 +61,21 @@ public class MainUIManager : MonoBehaviour
         // Update is called once per frame
     void Update()
     {
+        //ゴールしていないならreturn
+        if (goal.goalFlag) { return; }
+
         if (gamepad == null)
             gamepad = Gamepad.current;
-        if (goal.goalFlag){ return; }
+
         MenuDisplay();
         SelectButtonPos();
         ItemCount();
         TimeCount();
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //セレクト中のボタンがわかる処理
-
-    //////////////////////////////////
+    //-----------------------------------------------------
 
     void SelectButtonPos()
     {
@@ -98,12 +100,10 @@ public class MainUIManager : MonoBehaviour
             beforeButton = nowButton;
         }
     }
-    
-    //////////////////////////////////
 
+    //-----------------------------------------------------
     //タイムの表示とカウント
-
-    //////////////////////////////////
+    //-----------------------------------------------------
 
     void TimeCount()
     {
@@ -116,40 +116,25 @@ public class MainUIManager : MonoBehaviour
         timeText.text = "タイム\n" + second.ToString();
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //アイテム獲得数表示
-
-    //////////////////////////////////
+    //-----------------------------------------------------
 
     void ItemCount()
     {
         itemText.text = itemNum.ToString() + "個";
     }
 
-    //////////////////////////////////
-
-    //ポーズ解除時にジャンプしないための処理
-
-    //////////////////////////////////
-    
-    IEnumerator PauseWait()
-    {
-        yield return new WaitForSeconds(0.1f);
-        pause = false;
-    }
-
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //メニュー画面のON・OFF
-
-    //////////////////////////////////
+    //-----------------------------------------------------
 
     void MenuDisplay() 
     {
+        //ボタンを押したとき
         if (gamepad.startButton.wasPressedThisFrame)
         {
-            if (!panelFlag)
+            if (!panelFlag) //メニュー画面がオフ
             {
                 Time.timeScale = 0f;
                 playerAudio.Stop();
@@ -159,7 +144,7 @@ public class MainUIManager : MonoBehaviour
                 panelFlag = true;
                 pause = true;
             }
-            else
+            else //メニュー画面がオン
             {
                 Time.timeScale = 1f;
                 bgm.volume = 0.05f;
@@ -171,11 +156,19 @@ public class MainUIManager : MonoBehaviour
         }
     }
 
-    //////////////////////////////////
+    //-----------------------------------------------------
+    //ポーズ解除時にジャンプしないための処理
+    //-----------------------------------------------------
 
+    IEnumerator PauseWait()
+    {
+        yield return new WaitForSeconds(0.1f);
+        pause = false;
+    }
+
+    //-----------------------------------------------------
     //ボタンの処理
-
-    //////////////////////////////////
+    //-----------------------------------------------------
 
     public void OnReturnButton()
     {

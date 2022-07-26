@@ -7,7 +7,7 @@ public class PlayerJump : MonoBehaviour
 {
     Rigidbody rb;
     Gamepad gamepad;
-    PlayerAnimation playerAnimation;
+    PlayerStatus status;
     [SerializeField] GoalManager goal;
     [SerializeField] TutorialManager tutorialManager;
     [SerializeField] MainUIManager ui;
@@ -25,7 +25,7 @@ public class PlayerJump : MonoBehaviour
     void Start()
     {
         rb              = GetComponent<Rigidbody>();
-        playerAnimation = GetComponent<PlayerAnimation>();
+        status          = GetComponent<PlayerStatus>();
         ui              = ui.GetComponent<MainUIManager>();
         goal            = goal.GetComponent<GoalManager>();
         tutorialManager = tutorialManager.GetComponent<TutorialManager>();
@@ -33,6 +33,7 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //メニュー中、チュートリアル中、ゴール時はreturn
         if (ui.pause || tutorialManager.tutorialFlag || goal.goalFlag) { return; }
 
         if (gamepad == null)
@@ -41,30 +42,26 @@ public class PlayerJump : MonoBehaviour
         IsJump();
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //接地判定
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-    
     public bool IsGround()
     {
         return Physics.CheckSphere(transform.position, playerThicness, groundMask);
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //ジャンプする
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-   
     void IsJump()
     {
         if (IsGround())
         {
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
-                rb.AddForce(jumpPow * Vector3.up, ForceMode.Impulse);
+                rb.AddForce(status.getJumpPow() * Vector3.up, ForceMode.Impulse);
             }
         }
     }

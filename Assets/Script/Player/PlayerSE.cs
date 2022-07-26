@@ -28,9 +28,25 @@ public class PlayerSE : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playermove.isWalk)
+        //ゴールしていたらSEを止める
+        if (goal.goalFlag)
         {
-            if(playerJump.IsGround())
+            audio.Stop();
+            return;
+        }
+
+        MoveSE();
+    }
+
+    //-----------------------------------------------------
+    //歩行と走行のSEの切り替え
+    //-----------------------------------------------------
+
+    void MoveSE()
+    {
+        if (playermove.isWalk)
+        {
+            if (playerJump.IsGround())
             {
                 if (IsWalkSE)
                 {
@@ -39,19 +55,20 @@ public class PlayerSE : MonoBehaviour
                 StartCoroutine("WalkSE");
             }
         }
-        if(playermove.isRun && playerJump.IsGround())
+        if (playermove.isRun && playerJump.IsGround())
         {
-            if(IsRunSE)
+            if (IsRunSE)
             {
                 return;
             }
             StartCoroutine("RunSE");
         }
-        if(goal.goalFlag)
-        {
-            audio.Stop();
-        }
     }
+
+    //-----------------------------------------------------
+    //以下は歩行音を重複させないための処理
+    //-----------------------------------------------------
+
     IEnumerator WalkSE()
     {
         IsWalkSE = true;

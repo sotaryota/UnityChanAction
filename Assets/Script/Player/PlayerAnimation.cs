@@ -23,6 +23,7 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ゴールしたらアニメーションをすべて停止してreturn
         if (goal.goalFlag)
         {
             animator.SetBool("Walking", false);
@@ -30,9 +31,14 @@ public class PlayerAnimation : MonoBehaviour
             animator.SetBool("JumpFall", false);
             return;
         }
+
         AnimationMove();
         AnimationJumpFall();
     }
+
+    //-----------------------------------------------------
+    //移動のアニメーション
+    //-----------------------------------------------------
 
     private void AnimationMove()
     {
@@ -51,8 +57,13 @@ public class PlayerAnimation : MonoBehaviour
             animator.SetBool("Walking", false);
             animator.SetBool("Run", false);
         }
-    
+
     }
+
+    //-----------------------------------------------------
+    //ジャンプのアニメーション
+    //-----------------------------------------------------
+
     void AnimationJumpFall()
     {
         if(!playerJump.IsGround())

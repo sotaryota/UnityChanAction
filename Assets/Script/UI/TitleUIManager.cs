@@ -16,19 +16,20 @@ public class TitleUIManager : MonoBehaviour
     Button controllerButton;
     [SerializeField] GameObject buttonPanel;
 
-    private AudioSource select;
+    private AudioSource audio;
     [SerializeField] AudioClip selectSE;
+    [SerializeField] AudioClip ctrlPanelSE;
     [SerializeField] GameObject controllerPanel; //パネル
     [SerializeField] GameObject selectIcon;      //選択アイコン
     [SerializeField] Vector3 selectIconPos;      //選択アイコンの位置
     private GameObject nowButton;                //現在選択中のボタン
     private GameObject beforeButton;             //ひとつ前に選択していたボタン
-    public bool ctrlFlag = false;
+    private bool ctrlFlag = false;               //操作方法が表示されているかどうか
     private bool initial = true;                 //一度だけ処理をするための変数
 
     private void Start()
     {
-        select           = GetComponent<AudioSource>();
+        audio            = GetComponent<AudioSource>();
         startButton      = GameObject.Find("/Canvas/ButtonPanel/StartButton").GetComponent<Button>();
         exitButton       = GameObject.Find("/Canvas/ButtonPanel/ExitButton").GetComponent<Button>();
         tutorialButton   = GameObject.Find("/Canvas/ButtonPanel/TutorialButton").GetComponent<Button>();
@@ -46,12 +47,10 @@ public class TitleUIManager : MonoBehaviour
         SelectButtonPos();
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //セレクト中のボタンがわかる処理
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-    
     void SelectButtonPos()
     {
         //現在選択中のボタン
@@ -70,18 +69,16 @@ public class TitleUIManager : MonoBehaviour
         {
             //アイコンの位置を変更
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
-            select.PlayOneShot(selectSE);
+            audio.PlayOneShot(selectSE);
             //現在のボタンを保存
             beforeButton = nowButton;
         }
     }
 
-    //////////////////////////////////
-
+    //-----------------------------------------------------
     //操作方法の表示処理
+    //-----------------------------------------------------
 
-    //////////////////////////////////
-    
     void ControllerTutorial()
     {
         if (!ctrlFlag)
@@ -92,6 +89,7 @@ public class TitleUIManager : MonoBehaviour
         {
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
+                audio.PlayOneShot(ctrlPanelSE);
                 controllerPanel.SetActive(false);
                 buttonPanel.SetActive(true);
                 StartCoroutine("PanelFalseWait");
@@ -99,38 +97,38 @@ public class TitleUIManager : MonoBehaviour
         }
     }
 
-    //////////////////////////////////
-
-    //ボタンの処理
-
-    //////////////////////////////////
+    //-----------------------------------------------------
+    //ボタン毎の処理
+    //-----------------------------------------------------
 
     public void OnStartButton()
     {
+        audio.PlayOneShot(ctrlPanelSE);
         SceneManager.LoadScene("MainGameScene");
     }
     public void OnExitButton()
     {
+        audio.PlayOneShot(ctrlPanelSE);
         Application.Quit();
     }
     public void OnTutorialButton()
     {
+        audio.PlayOneShot(ctrlPanelSE);
         SceneManager.LoadScene("TutorialScene");
     }
 
     public void OnControllerButton()
     {
+        audio.PlayOneShot(ctrlPanelSE);
         StartCoroutine("PanelTureWait");
         buttonPanel.SetActive(false);
         controllerPanel.SetActive(true);
     }
 
-    //////////////////////////////////
+    //-----------------------------------------------------
+    //ボタン判定が重複しないための処理
+    //-----------------------------------------------------
 
-    //ボタン判定が重複しないためのコルーチン
-
-    //////////////////////////////////
-    
     IEnumerator PanelTureWait()
     {
         yield return new WaitForSeconds(0.1f);

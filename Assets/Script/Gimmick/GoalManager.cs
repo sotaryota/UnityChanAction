@@ -36,18 +36,24 @@ public class GoalManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!goalFlag)
-            return;
+        //ゴールしていないならreturn
+        if (!goalFlag) { return; }
+
         if (gamepad == null)
             gamepad = Gamepad.current;
 
+        //ゴールした際に一度だけ処理
         if (initial)
         {
+            //表示したい値の計算と用意
+            //--------------------------------------------
             time = (int)mainUI.nowTime;
             item = mainUI.itemNum;
             timeTotalScore = time * timeScore;
             itemTotalScore = item * itemScore;
             totalScore = timeTotalScore + itemTotalScore;
+            //--------------------------------------------
+
             StartCoroutine("ResultScore");
             initial = false;
         }
@@ -67,6 +73,9 @@ public class GoalManager : MonoBehaviour
         }
     }
 
+    //-----------------------------------------------------
+    //テキストの表示とゲーム終了に移行する処理
+    //-----------------------------------------------------
     IEnumerator ResultScore()
     {
         yield return new WaitForSeconds(waitTime);
