@@ -13,6 +13,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] TutorialManager tutorialManager;
     [SerializeField] GoalManager goal;
     [SerializeField] MainUIManager ui;
+    SEManager seManager;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
@@ -36,6 +37,7 @@ public class PlayerMove : MonoBehaviour
         ui                 = ui.GetComponent<MainUIManager>();
         goal               = goal.GetComponent<GoalManager>(); 
         tutorialManager    = tutorialManager.GetComponent<TutorialManager>();
+        seManager          = GameObject.Find("SEManager").GetComponent<SEManager>();
     }
 
     // Update is called once per frame
@@ -120,13 +122,13 @@ public class PlayerMove : MonoBehaviour
     //-----------------------------------------------------
     //オブジェクトとの接触判定
     //-----------------------------------------------------
-
+    [SerializeField] AudioClip itemSE;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Item")
         {
             ui.itemNum++;
-
+            seManager.ItemSE();
             Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Goal")

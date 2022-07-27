@@ -14,11 +14,9 @@ public class TitleUIManager : MonoBehaviour
     Button tutorialButton;
     Button controllerButton;
     [SerializeField] GameObject buttonPanel;
+    SEManager seManager;
     FadeManager fadeManager;
 
-    private AudioSource audio;
-    [SerializeField] AudioClip selectSE;
-    [SerializeField] AudioClip ctrlPanelSE;
     [SerializeField] GameObject controllerPanel; //パネル
     [SerializeField] GameObject selectIcon;      //選択アイコン
     [SerializeField] Vector3 selectIconPos;      //選択アイコンの位置
@@ -30,7 +28,7 @@ public class TitleUIManager : MonoBehaviour
 
     private void Start()
     {
-        audio            = GetComponent<AudioSource>();
+        seManager        = GameObject.Find("SEManager").GetComponent<SEManager>();
         fadeManager      = GameObject.Find("FadeManager").GetComponent<FadeManager>();
         startButton      = GameObject.Find("/Canvas/ButtonPanel/StartButton").GetComponent<Button>();
         exitButton       = GameObject.Find("/Canvas/ButtonPanel/ExitButton").GetComponent<Button>();
@@ -74,7 +72,7 @@ public class TitleUIManager : MonoBehaviour
         {
             //アイコンの位置を変更
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
-            audio.PlayOneShot(selectSE);
+            seManager.SelectSE();
             //現在のボタンを保存
             beforeButton = nowButton;
         }
@@ -94,7 +92,7 @@ public class TitleUIManager : MonoBehaviour
         {
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
-                audio.PlayOneShot(ctrlPanelSE);
+                seManager.ClickSE();
                 controllerPanel.SetActive(false);
                 buttonPanel.SetActive(true);
                 StartCoroutine("PanelFalseWait");
@@ -110,25 +108,25 @@ public class TitleUIManager : MonoBehaviour
     {
         if (!initialClick) { return; }
         initialClick = false;
-        audio.PlayOneShot(ctrlPanelSE);
+        seManager.ClickSE();
         fadeManager.FadeOut("MainGameScene", 255, 255, 255, 1f);
     }
     public void OnExitButton()
     {
-        audio.PlayOneShot(ctrlPanelSE);
+        seManager.ClickSE();
         Application.Quit();
     }
     public void OnTutorialButton()
     {
         if (!initialClick) { return; }
         initialClick = false;
-        audio.PlayOneShot(ctrlPanelSE); 
+        seManager.ClickSE();
         fadeManager.FadeOut("TutorialScene", 255, 255, 255, 1f);
     }
 
     public void OnControllerButton()
     {
-        audio.PlayOneShot(ctrlPanelSE);
+        seManager.ClickSE();
         StartCoroutine("PanelTureWait");
         buttonPanel.SetActive(false);
         controllerPanel.SetActive(true);

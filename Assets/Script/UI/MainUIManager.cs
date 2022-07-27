@@ -13,10 +13,9 @@ public class MainUIManager : MonoBehaviour
     FadeManager fadeManager;
 
     [Header("Audio")]
-    private AudioSource select;
-    [SerializeField] AudioClip selectSE;
     [SerializeField] AudioSource playerAudio;
     [SerializeField] AudioSource bgm;
+    SEManager seManager;
 
     [Header("Main Menu")]
     [SerializeField] GameObject menuPanel;     //メニュー画面用のパネル
@@ -46,11 +45,11 @@ public class MainUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        select        = GetComponent<AudioSource>();
         playerAudio   = playerAudio.GetComponent<AudioSource>();
         bgm           = bgm.GetComponent<AudioSource>();
         goal          = goal.GetComponent<GoalManager>();
         fadeManager   = GameObject.Find("FadeManager").GetComponent<FadeManager>();
+        seManager     = GameObject.Find("SEManager").GetComponent<SEManager>();
         returnButton  = GameObject.Find("/Canvas/MainMenuPanel/ReturnButton").GetComponent<Button>();
         restartButton = GameObject.Find("/Canvas/MainMenuPanel/RestartButton").GetComponent<Button>();
         titleButton   = GameObject.Find("/Canvas/MainMenuPanel/TitleButton").GetComponent<Button>();
@@ -98,7 +97,7 @@ public class MainUIManager : MonoBehaviour
         {
             //アイコンの位置を変更
             selectIcon.transform.position = nowButton.transform.position - selectIconPos;
-            select.PlayOneShot(selectSE);
+            seManager.SelectSE();
             //現在のボタンを保存
             beforeButton = nowButton;
         }
@@ -175,6 +174,7 @@ public class MainUIManager : MonoBehaviour
 
     public void OnReturnButton()
     {
+        seManager.ClickSE();
         panelFlag = false;
         StartCoroutine("PauseWait");
         menuPanel.SetActive(false);
@@ -185,18 +185,21 @@ public class MainUIManager : MonoBehaviour
     {
         if (!initialClick) { return; }
         initialClick = false;
+        seManager.ClickSE();
         Time.timeScale = 1;
         fadeManager.FadeOut(nowScene.name, 0, 0, 0, 0.5f);
     }
     public void OnTitleButton()
     {
         if (!initialClick) { return; }
-        initialClick = false;
+        initialClick = false; 
+        seManager.ClickSE();
         Time.timeScale = 1f; 
         fadeManager.FadeOut("TitleScene", 0, 0, 0, 1f);
     }
     public void OnExitButton()
     {
+        seManager.ClickSE();
         Application.Quit();
     }
 }
