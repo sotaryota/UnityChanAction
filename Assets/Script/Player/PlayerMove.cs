@@ -41,7 +41,7 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //チュートリアル表示中出ないならreturn
+        //ゴールしていたらreturn
         if (goal.goalFlag) { return; }
 
         if (gamepad == null)

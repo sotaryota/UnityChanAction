@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GoalManager : MonoBehaviour
 {
     Gamepad gamepad;
     [SerializeField] MainUIManager mainUI;
+    [SerializeField] AudioSource bgm;
+    FadeManager fadeManager;
 
-    public bool goalFlag = false;
-    private bool initial = true;
-    private bool exitGameFlag = false;
-    public Text resultText;
+    public bool goalFlag = false;       //ゴールしているか
+    private bool initial = true;        //ゴール時に一度だけ処理をするための変数
+    private bool initialClick = true;        //ボタン処理を重複させないためのフラグ
+    private bool exitGameFlag = false;  //trueならゲームを終了できる
+    public Text resultText;             //リザルトの表示テキスト
 
-    private int time;
-    private int timeScore = 10;
-    private int timeTotalScore;
-    private int item;
-    private int itemScore = 100;
-    private int itemTotalScore;
-    private int totalScore;
+    private int time;                   //残りタイム
+    private int timeScore = 10;         //タイムの基本スコア
+    private int timeTotalScore;         //タイムの合計スコア
+    private int item;                   //アイテム獲得数
+    private int itemScore = 100;        //アイテムの基本スコア
+    private int itemTotalScore;         //アイテムの合計スコア
+    private int totalScore;             //タイムとアイテムの合計スコア
 
-    [SerializeField] private GameObject gameUIPanel;
-    [SerializeField] private GameObject goalPanel;
-    [SerializeField] private float waitTime;
+    [SerializeField] private GameObject gameUIPanel; //ゲームのメインUI
+    [SerializeField] private GameObject goalPanel;   //ゴール時に表示するUI
+    [SerializeField] private float waitTime;         //テキストの表示間隔
 
     void Start()
     {
-        mainUI = mainUI.GetComponent<MainUIManager>();
+        mainUI      = mainUI.GetComponent<MainUIManager>();
+        fadeManager = GameObject.Find("FadeManager").GetComponent<FadeManager>(); 
         goalPanel.SetActive(false);
     }
 
@@ -68,7 +71,9 @@ public class GoalManager : MonoBehaviour
             Debug.Log("ゲームを終了できます");
             if (gamepad.buttonSouth.wasPressedThisFrame)
             {
-                SceneManager.LoadScene("TitleScene");
+                if (!initialClick) { return; }
+                initialClick = false;
+                fadeManager.FadeOut("TitleScene", 0, 0, 0, 1f);
             }
         }
     }
@@ -78,7 +83,11 @@ public class GoalManager : MonoBehaviour
     //-----------------------------------------------------
     IEnumerator ResultScore()
     {
-        yield return new WaitForSeconds(waitTime);
+        while(bgm.volume > 0)
+        {
+            bgm.volume -= 0.0001f;
+            yield return 0;
+        }
 
         gameUIPanel.SetActive(false);
         goalPanel.SetActive(true);

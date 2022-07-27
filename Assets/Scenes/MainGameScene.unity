@@ -4089,6 +4089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainUI: {fileID: 670115287}
+  bgm: {fileID: 963194230}
   goalFlag: 0
   resultText: {fileID: 2072721517}
   gameUIPanel: {fileID: 1388411420}

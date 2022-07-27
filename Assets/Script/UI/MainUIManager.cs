@@ -10,6 +10,7 @@ public class MainUIManager : MonoBehaviour
 {
     Gamepad gamepad;
     [SerializeField] GoalManager goal;
+    FadeManager fadeManager;
 
     [Header("Audio")]
     private AudioSource select;
@@ -31,6 +32,7 @@ public class MainUIManager : MonoBehaviour
     private GameObject nowButton;              //現在選択中のボタン
     private GameObject beforeButton;           //ボタンを切り替えたかどうか
     private bool initial = true;               //一度だけ処理をするための変数
+    private bool initialClick = true;          //ボタン処理を重複させないためのフラグ
     public bool pause = false;                 //メニュー画面が開かれているか
 
     [Header("Item")]
@@ -48,6 +50,7 @@ public class MainUIManager : MonoBehaviour
         playerAudio   = playerAudio.GetComponent<AudioSource>();
         bgm           = bgm.GetComponent<AudioSource>();
         goal          = goal.GetComponent<GoalManager>();
+        fadeManager   = GameObject.Find("FadeManager").GetComponent<FadeManager>();
         returnButton  = GameObject.Find("/Canvas/MainMenuPanel/ReturnButton").GetComponent<Button>();
         restartButton = GameObject.Find("/Canvas/MainMenuPanel/RestartButton").GetComponent<Button>();
         titleButton   = GameObject.Find("/Canvas/MainMenuPanel/TitleButton").GetComponent<Button>();
@@ -61,8 +64,8 @@ public class MainUIManager : MonoBehaviour
         // Update is called once per frame
     void Update()
     {
-        //ゴールしていないならreturn
-        if (goal.goalFlag) { return; }
+        //ゴールしているかシーンが切り替わっているならreturn
+        if (goal.goalFlag || !initialClick) { return; }
 
         if (gamepad == null)
             gamepad = Gamepad.current;
@@ -180,13 +183,17 @@ public class MainUIManager : MonoBehaviour
     }
     public void OnRestartButton()
     {
+        if (!initialClick) { return; }
+        initialClick = false;
         Time.timeScale = 1;
-        SceneManager.LoadScene(nowScene.name);
+        fadeManager.FadeOut(nowScene.name, 0, 0, 0, 0.5f);
     }
     public void OnTitleButton()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("TitleScene");
+        if (!initialClick) { return; }
+        initialClick = false;
+        Time.timeScale = 1f; 
+        fadeManager.FadeOut("TitleScene", 0, 0, 0, 1f);
     }
     public void OnExitButton()
     {

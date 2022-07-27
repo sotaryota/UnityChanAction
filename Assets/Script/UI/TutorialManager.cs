@@ -13,7 +13,7 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Tutorial")]
     [SerializeField] GameObject tutorialPanel;   //チュートリアル用のパネル
-    public GameObject[] tutorialImage; //表示する画像
+    public GameObject[] tutorialImage;           //表示する画像
     public int imageNum = 0;                     //表示したい画像の番号
     public bool tutorialFlag = false;
 
@@ -34,7 +34,7 @@ public class TutorialManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //チュートリアル表示中出ないならreturn
+        //チュートリアル表示中でないならreturn
         if (!tutorialFlag) return;
 
         if (gamepad == null)

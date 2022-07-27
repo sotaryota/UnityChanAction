@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainUI: {fileID: 670115287}
+  bgm: {fileID: 963194230}
   goalFlag: 0
   resultText: {fileID: 1077738586}
   gameUIPanel: {fileID: 2062412537}
@@ -1426,7 +1427,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 72469936}
-  pause: 0
   selectSE: {fileID: 8300000, guid: b4181114552491043b36803f61b34efb, type: 3}
   playerAudio: {fileID: 300426526}
   bgm: {fileID: 963194230}
@@ -1437,6 +1437,7 @@ MonoBehaviour:
   exitButton: {fileID: 721629360}
   selectIcon: {fileID: 601747148}
   selectIconPos: {x: 230, y: 0, z: 0}
+  pause: 0
   itemNum: 0
   itemText: {fileID: 1793892968}
   nowTime: 99

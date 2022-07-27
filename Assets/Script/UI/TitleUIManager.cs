@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
@@ -15,6 +14,7 @@ public class TitleUIManager : MonoBehaviour
     Button tutorialButton;
     Button controllerButton;
     [SerializeField] GameObject buttonPanel;
+    FadeManager fadeManager;
 
     private AudioSource audio;
     [SerializeField] AudioClip selectSE;
@@ -26,10 +26,12 @@ public class TitleUIManager : MonoBehaviour
     private GameObject beforeButton;             //ひとつ前に選択していたボタン
     private bool ctrlFlag = false;               //操作方法が表示されているかどうか
     private bool initial = true;                 //一度だけ処理をするための変数
+    private bool initialClick = true;            //ボタン処理を重複させないためのフラグ
 
     private void Start()
     {
         audio            = GetComponent<AudioSource>();
+        fadeManager      = GameObject.Find("FadeManager").GetComponent<FadeManager>();
         startButton      = GameObject.Find("/Canvas/ButtonPanel/StartButton").GetComponent<Button>();
         exitButton       = GameObject.Find("/Canvas/ButtonPanel/ExitButton").GetComponent<Button>();
         tutorialButton   = GameObject.Find("/Canvas/ButtonPanel/TutorialButton").GetComponent<Button>();
@@ -40,6 +42,9 @@ public class TitleUIManager : MonoBehaviour
 
     private void Update()
     {
+        //シーンが切り替わっているならreturn
+        if (!initialClick) { return; }
+
         if (gamepad == null)
             gamepad = Gamepad.current;
 
@@ -103,8 +108,10 @@ public class TitleUIManager : MonoBehaviour
 
     public void OnStartButton()
     {
+        if (!initialClick) { return; }
+        initialClick = false;
         audio.PlayOneShot(ctrlPanelSE);
-        SceneManager.LoadScene("MainGameScene");
+        fadeManager.FadeOut("MainGameScene", 255, 255, 255, 1f);
     }
     public void OnExitButton()
     {
@@ -113,8 +120,10 @@ public class TitleUIManager : MonoBehaviour
     }
     public void OnTutorialButton()
     {
-        audio.PlayOneShot(ctrlPanelSE);
-        SceneManager.LoadScene("TutorialScene");
+        if (!initialClick) { return; }
+        initialClick = false;
+        audio.PlayOneShot(ctrlPanelSE); 
+        fadeManager.FadeOut("TutorialScene", 255, 255, 255, 1f);
     }
 
     public void OnControllerButton()
