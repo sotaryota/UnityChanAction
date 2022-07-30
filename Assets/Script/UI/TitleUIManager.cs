@@ -109,7 +109,7 @@ public class TitleUIManager : MonoBehaviour
         if (!initialClick) { return; }
         initialClick = false;
         seManager.ClickSE();
-        fadeManager.FadeOut("MainGameScene", 255, 255, 255, 1f);
+        fadeManager.FadeOut("MainGameScene", 1, 1, 1, 1f);
     }
     public void OnExitButton()
     {
@@ -121,7 +121,7 @@ public class TitleUIManager : MonoBehaviour
         if (!initialClick) { return; }
         initialClick = false;
         seManager.ClickSE();
-        fadeManager.FadeOut("TutorialScene", 255, 255, 255, 1f);
+        fadeManager.FadeOut("TutorialScene", 1, 1, 1, 1f);
     }
 
     public void OnControllerButton()

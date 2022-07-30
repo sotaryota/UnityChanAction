@@ -73,7 +73,7 @@ public class GoalManager : MonoBehaviour
             {
                 if (!initialClick) { return; }
                 initialClick = false;
-                fadeManager.FadeOut("TitleScene", 0, 0, 0, 1f);
+                fadeManager.FadeOut("TitleScene", 1, 1, 1, 1f);
             }
         }
     }

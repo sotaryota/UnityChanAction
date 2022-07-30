@@ -13,6 +13,7 @@ TagManager:
   - Goal
   - Tutorial
   - Dath
+  - Fall
   layers:
   - Default
   - TransparentFX

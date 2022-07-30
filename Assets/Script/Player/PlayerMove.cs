@@ -9,18 +9,13 @@ public class PlayerMove : MonoBehaviour
     Gamepad gamepad;
 
     [Header("スクリプト")]
-    PlayerStatus status;
-    [SerializeField] TutorialManager tutorialManager;
+    PlayerStatus status; 
     [SerializeField] GoalManager goal;
-    [SerializeField] MainUIManager ui;
-    SEManager seManager;
 
     private Vector3 cameraForward;        //カメラの方向
     private Vector3 moveForward;          //プレイヤの方向
 
     [Header("プレイヤ情報")]
-    [SerializeField] GameObject startPos; //キャラの初期位置
-    [SerializeField] GameObject onBlock;  //プレイヤが乗っているブロック
     private Vector3 moveDirection;        //プレイヤの移動量
     private float nowSpeed;               //現在の移動スピード
     private float horizontal;             //LスティックX軸
@@ -31,13 +26,9 @@ public class PlayerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = startPos.transform.position;
         status             = GetComponent<PlayerStatus>();
         rb                 = GetComponent<Rigidbody>();
-        ui                 = ui.GetComponent<MainUIManager>();
-        goal               = goal.GetComponent<GoalManager>(); 
-        tutorialManager    = tutorialManager.GetComponent<TutorialManager>();
-        seManager          = GameObject.Find("SEManager").GetComponent<SEManager>();
+        goal               = goal.GetComponent<GoalManager>();
     }
 
     // Update is called once per frame
@@ -117,56 +108,5 @@ public class PlayerMove : MonoBehaviour
     bool RunFlag(float Xlow, float Xhigh, float Ylow, float Yhigh)
     {
         return Xlow >= horizontal || horizontal >= Xhigh || Ylow >= vertical || vertical >= Yhigh;
-    }
-
-    //-----------------------------------------------------
-    //オブジェクトとの接触判定
-    //-----------------------------------------------------
-    [SerializeField] AudioClip itemSE;
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Item")
-        {
-            ui.itemNum++;
-            seManager.ItemSE();
-            Destroy(other.gameObject);
-        }
-        if (other.gameObject.tag == "Goal")
-        {
-            goal.goalFlag = true;
-        }
-        if (other.gameObject.tag == "Tutorial" && tutorialManager.imageNum < tutorialManager.tutorialImage.Length + 1)
-        {
-            tutorialManager.tutorialFlag = true;
-            other.gameObject.SetActive(false);
-        }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Dath")
-        {
-            transform.position = startPos.transform.position;
-        }
-    }
-
-    //-----------------------------------------------------
-    //動く床に乗った時の処理
-    //-----------------------------------------------------
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "MoveBlock")
-        {
-            onBlock = collision.gameObject.transform.parent.gameObject;
-            transform.SetParent(onBlock.transform);
-        }
-    }
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "MoveBlock")
-        {
-            onBlock = null;
-            transform.SetParent(null);
-        }
     }
 }

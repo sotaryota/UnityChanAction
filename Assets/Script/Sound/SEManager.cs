@@ -51,14 +51,20 @@ public class SEManager : MonoBehaviour
 
     public void ItemSE()
     {
+        audioSource.volume = 0.05f;
+        audioSource.pitch = 1.5f;
         audioSource.PlayOneShot(itemSE);
     }
     public void SelectSE()
     {
+        audioSource.volume = 0.1f;
+        audioSource.pitch = 1f;
         audioSource.PlayOneShot(selectSE);
     }
     public void ClickSE()
     {
+        audioSource.volume = 0.1f;
+        audioSource.pitch = 1f;
         audioSource.PlayOneShot(clickSE);
     }
 }

@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [SerializeField] private float hp_;
-    [SerializeField] private float walkSpeed_;
-    [SerializeField] private float RunSpeed_;
-    [SerializeField] private float jumpPow_;
+    [SerializeField] private float hp_;         //HP
+    [SerializeField] private float maxHp_;      //最大HP
+    [SerializeField] private float walkSpeed_;  //歩行スピード
+    [SerializeField] private float RunSpeed_;   //走行スピード
+    [SerializeField] private float jumpPow_;    //ジャンプ力
 
     public float getHp()
     {
         return hp_;
+    }
+
+    public float getMaxHp()
+    {
+        return maxHp_;
     }
 
     public float getWalkSpeed()
@@ -29,13 +35,13 @@ public class PlayerStatus : MonoBehaviour
         return jumpPow_;
     }
 
-    public void Damage(float damage)
+    public void Damage(float damage_)
     {
-        hp_ -= damage;
+        hp_ -= damage_;
     }
-    public void Health(float health)
+    public void Health(float health_)
     {
-        hp_ += health;
+        hp_ += health_;
     }
 
 }
