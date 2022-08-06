@@ -27,7 +27,6 @@ public class PlayerMain : MonoBehaviour
         transform.position = startPos.transform.position;
     }
 
-
     //-----------------------------------------------------
     //オブジェクトとの接触判定
     //-----------------------------------------------------

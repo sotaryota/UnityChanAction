@@ -43,12 +43,26 @@ public class SEManager : MonoBehaviour
     [SerializeField] private AudioClip itemSE;
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private AudioClip selectSE;
+    [SerializeField] private AudioClip resultScoreSE;
+    [SerializeField] private AudioClip resultTotalScoreSE;
 
     private void Start()
     {
         audioSource = audioSource.GetComponent<AudioSource>();
     }
 
+    public void ResultScoreSE()
+    {
+        audioSource.volume = 0.1f;
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(resultScoreSE);
+    }
+    public void ResultTotalScoreSE()
+    {
+        audioSource.volume = 0.1f;
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(resultTotalScoreSE);
+    }
     public void ItemSE()
     {
         audioSource.volume = 0.05f;

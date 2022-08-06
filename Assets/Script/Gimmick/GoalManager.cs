@@ -9,11 +9,12 @@ public class GoalManager : MonoBehaviour
     Gamepad gamepad;
     [SerializeField] MainUIManager mainUI;
     [SerializeField] AudioSource bgm;
+    SEManager seManager;
     FadeManager fadeManager;
 
     public bool goalFlag = false;       //ゴールしているか
     private bool initial = true;        //ゴール時に一度だけ処理をするための変数
-    private bool initialClick = true;        //ボタン処理を重複させないためのフラグ
+    private bool initialClick = true;   //ボタン処理を重複させないためのフラグ
     private bool exitGameFlag = false;  //trueならゲームを終了できる
     public Text resultText;             //リザルトの表示テキスト
 
@@ -27,13 +28,16 @@ public class GoalManager : MonoBehaviour
 
     [SerializeField] private GameObject gameUIPanel; //ゲームのメインUI
     [SerializeField] private GameObject goalPanel;   //ゴール時に表示するUI
+    [SerializeField] private GameObject titleReturn; //タイトルに戻る表示
     [SerializeField] private float waitTime;         //テキストの表示間隔
 
     void Start()
     {
         mainUI      = mainUI.GetComponent<MainUIManager>();
+        seManager   = GameObject.Find("SEManager").GetComponent<SEManager>();
         fadeManager = GameObject.Find("FadeManager").GetComponent<FadeManager>(); 
         goalPanel.SetActive(false);
+        titleReturn.SetActive(false);
     }
 
     // Update is called once per frame
@@ -73,6 +77,7 @@ public class GoalManager : MonoBehaviour
             {
                 if (!initialClick) { return; }
                 initialClick = false;
+                seManager.ClickSE();
                 fadeManager.FadeOut("TitleScene", 1, 1, 1, 1f);
             }
         }
@@ -94,20 +99,22 @@ public class GoalManager : MonoBehaviour
 
         yield return new WaitForSeconds(waitTime);
 
-
+        seManager.ResultScoreSE();
         resultText.text = "残りタイム\n" + time.ToString() + " × " + timeScore.ToString() +  " = " + timeTotalScore.ToString() + "\n\n";
 
          yield return new WaitForSeconds(waitTime);
 
+        seManager.ResultScoreSE();
         resultText.text += "アイテム獲得数\n" + item.ToString() + " × " + itemScore.ToString() + " = " + itemTotalScore.ToString() + "\n\n";
-
 
         yield return new WaitForSeconds(waitTime);
 
+        seManager.ResultTotalScoreSE();
         resultText.text += "合計スコア\n" + timeTotalScore.ToString() + " + " + itemTotalScore.ToString() + " = " + totalScore.ToString() + "\n\n";
 
         yield return new WaitForSeconds(waitTime);
 
+        titleReturn.SetActive(true);
         exitGameFlag = true;
     }
 }

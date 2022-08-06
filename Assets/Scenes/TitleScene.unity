@@ -457,10 +457,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -776,6 +776,8 @@ MonoBehaviour:
   itemSE: {fileID: 8300000, guid: 71591f93824b8114ab1a0fd72b592c4a, type: 3}
   clickSE: {fileID: 8300000, guid: 96165d1ede0b4244883da99908abbc26, type: 3}
   selectSE: {fileID: 8300000, guid: b4181114552491043b36803f61b34efb, type: 3}
+  resultScoreSE: {fileID: 8300000, guid: 0a3ebbfb1220b704abfe2fce57a2b93c, type: 3}
+  resultTotalScoreSE: {fileID: 8300000, guid: 7a204bf9f008e2f49aa22ad735c9e47b, type: 3}
 --- !u!4 &1074200605
 Transform:
   m_ObjectHideFlags: 0
